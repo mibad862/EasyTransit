@@ -1,40 +1,58 @@
-import 'package:demo_project1/common_widgets/common_elevated_button.dart';
-import 'package:demo_project1/views/otp_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../common_widgets/common_elevated_button.dart';
+import 'otp_screen.dart';
 
 class OTPRegisterScreen extends StatefulWidget {
-  const OTPRegisterScreen({required Key key}) : super(key: key);
+  const OTPRegisterScreen({super.key});
 
   @override
   RegisterState createState() => RegisterState();
 }
 
 class RegisterState extends State<OTPRegisterScreen> {
+  final  phoneNumberController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isInputValid = false;
+
+  @override
+  void dispose() {
+    phoneNumberController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      appBar: _buildAppBar(screenWidth),
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.transparent,
-      body: SafeArea(
-        child: Container(
-          decoration: _buildBackgroundDecoration(),
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.085),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildIllustration(screenHeight, screenWidth),
-              SizedBox(height: screenHeight * 0.005),
-              _buildRegistrationText(screenWidth),
-              SizedBox(height: screenHeight * 0.010),
-              _buildDescriptionText(screenWidth),
-              SizedBox(height: screenHeight * 0.040),
-              _buildForm(screenHeight, screenWidth, context),
-            ],
+    return Container(
+      decoration: _buildBackgroundDecoration(),
+      child: Scaffold(
+        appBar: _buildAppBar(screenWidth),
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Container(
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.085),
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildIllustration(screenHeight, screenWidth),
+                    SizedBox(height: screenHeight * 0.005),
+                    _buildRegistrationText(screenWidth),
+                    SizedBox(height: screenHeight * 0.010),
+                    _buildDescriptionText(screenWidth),
+                    SizedBox(height: screenHeight * 0.040),
+                    _buildForm(screenHeight, screenWidth, context),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -89,7 +107,7 @@ class RegisterState extends State<OTPRegisterScreen> {
 
   Widget _buildDescriptionText(double screenWidth) {
     return Text(
-      "Add your phone number. we'll send you a verification code so we know you're real",
+      "Add your phone number. We'll send you a verification code so we know you're real",
       style: TextStyle(
         fontSize: screenWidth * 0.040,
         fontWeight: FontWeight.bold,
@@ -114,14 +132,20 @@ class RegisterState extends State<OTPRegisterScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
+            controller: phoneNumberController,
             keyboardType: TextInputType.number,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
+            onChanged: (value) {
+              setState(() {
+                isInputValid = value.length == 10;
+              });
+            },
             decoration: InputDecoration(
               contentPadding:
-              EdgeInsets.symmetric(vertical: screenHeight * 0.020),
+                  EdgeInsets.symmetric(vertical: screenHeight * 0.020),
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black12),
                 borderRadius: BorderRadius.circular(10),
@@ -130,22 +154,32 @@ class RegisterState extends State<OTPRegisterScreen> {
                 borderSide: const BorderSide(color: Colors.black12),
                 borderRadius: BorderRadius.circular(10),
               ),
-              prefix: const Padding(
+              prefix: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
                   '(+92)',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: screenWidth * 0.050,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              suffixIcon: const Icon(
+              suffixIcon: Icon(
                 Icons.check_circle,
-                color: Colors.green,
-                size: 32,
+                color: isInputValid ? Colors.green : Colors.grey,
+                size: screenWidth * 0.070,
               ),
             ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your phone number';
+              }
+              if (value.length != 10) {
+                return 'Phone number should be 10 digits';
+              }
+              return null;
+            },
+            maxLength: 10,
           ),
           SizedBox(height: screenHeight * 0.030),
           CommonElevatedButton(
@@ -155,13 +189,21 @@ class RegisterState extends State<OTPRegisterScreen> {
             height: screenHeight * 0.065,
             buttonColor: Colors.purple,
             textColor: Colors.white,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => OtpScreen(
-                  key: UniqueKey(),
-                ),
-              ),
-            ),
+            onPressed: () async {
+              final phoneController = '+92${phoneNumberController.text.trim()}';
+              await FirebaseAuth.instance.verifyPhoneNumber(
+                  verificationCompleted: (PhoneAuthCredential credential) {},
+                  verificationFailed: (FirebaseAuthException ex) {},
+                  codeSent: (String verificationid, int? resendtoken) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                OtpScreen(verificationId: verificationid)));
+                  },
+                  codeAutoRetrievalTimeout: (String verificationid) {},
+                  phoneNumber: phoneController);
+            },
             text: "Send",
           ),
         ],

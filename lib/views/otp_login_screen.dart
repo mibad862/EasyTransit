@@ -127,12 +127,12 @@ class _RegisterState extends State<OtpLogin> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => OtpScreen(
-                                        key: UniqueKey(),
-                                      )),
-                            );
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //       builder: (context) => OtpScreen(
+                            //             key: UniqueKey(),
+                            //           )),
+                            // );
                           },
                           style: ButtonStyle(
                             foregroundColor:
