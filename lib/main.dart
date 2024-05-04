@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(),
         '/login': (context) => const Welcome(), // Update to LoginPage
+        // '/otp': (context) => const OtpScreen(), // Update to LoginPage
 
         // Add routes for other pages here
       },
