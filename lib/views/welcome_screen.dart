@@ -67,7 +67,7 @@ class _WelcomeState extends State<Welcome> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) => OtpRegister(
+                            builder: (context) => OTPRegisterScreen(
                                   key: UniqueKey(),
                                 )),
                       );
