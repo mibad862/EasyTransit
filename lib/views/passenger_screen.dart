@@ -2,7 +2,6 @@ import 'package:demo_project1/views/widgets/create_parcel_request.dart';
 import 'package:demo_project1/views/ride_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:demo_project1/views/driver_screen.dart';
-
 import 'widgets/bus_scedule.dart';
 import 'widgets/emergency_service.dart';
 
