@@ -1,5 +1,5 @@
+import 'package:demo_project1/views/registration_page.dart';
 import 'package:flutter/material.dart';
-import 'registration_page.dart';
 import 'home_screen.dart';
 import 'forget_password.dart';
 
@@ -64,8 +64,7 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 24),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.black,
+                  foregroundColor: Colors.black, backgroundColor: Colors.white,
                 ),
                 onPressed: () {
                   _signIn(context);

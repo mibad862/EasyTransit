@@ -1,12 +1,14 @@
+import 'package:demo_project1/views/passenger_screen.dart';
 import 'package:flutter/material.dart';
-import 'passenger_screen.dart'; // Import the passenger screen file
 import 'create_ride_screen.dart';
 
 class DriverScreen extends StatelessWidget {
-  int _currentIndex = 0; // Added to manage the current index of the bottom navigation bar
+  const DriverScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+  int _currentIndex = 0;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

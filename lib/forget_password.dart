@@ -55,7 +55,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.black),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                 ),
               ),
               Spacer(flex: 3),
