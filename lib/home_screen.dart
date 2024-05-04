@@ -1,8 +1,10 @@
+import 'package:demo_project1/views/passenger_screen.dart';
 import 'package:flutter/material.dart';
-import 'passenger_screen.dart'; // Import the passenger screen file
 import 'driver_screen.dart'; // Import the driver screen file
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +49,7 @@ class HomeScreen extends StatelessWidget {
                         child: Text('PASSENGER'),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        onPrimary: Colors.black,
+                        foregroundColor: Colors.black, backgroundColor: Colors.white,
                         textStyle: TextStyle(
                           fontSize: 20,
                         ),
@@ -68,8 +69,7 @@ class HomeScreen extends StatelessWidget {
                         child: Text('DRIVER'),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        onPrimary: Colors.black,
+                        foregroundColor: Colors.black, backgroundColor: Colors.white,
                         textStyle: TextStyle(
                           fontSize: 20,
                         ),

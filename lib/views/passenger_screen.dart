@@ -8,11 +8,13 @@ import 'widgets/emergency_service.dart';
 
 
 class PassengerScreen extends StatefulWidget {
+  const PassengerScreen({super.key});
+
   @override
-  _PassengerScreenState createState() => _PassengerScreenState();
+  PassengerScreenState createState() => PassengerScreenState();
 }
 
-class _PassengerScreenState extends State<PassengerScreen> {
+class PassengerScreenState extends State<PassengerScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
