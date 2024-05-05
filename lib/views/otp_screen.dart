@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
+
 import '../common_widgets/common_elevated_button.dart';
 import '../home_screen.dart';
 
@@ -103,7 +106,11 @@ class _OtpState extends State<OtpScreen> {
                       Pinput(
                         controller: otpController,
                         focusNode: focusNode,
-                        androidSmsAutofillMethod: AndroidSmsAutofillMethod.none,
+
+                        androidSmsAutofillMethod:
+                            AndroidSmsAutofillMethod.smsRetrieverApi,
+                        length: 6,
+
                         listenForMultipleSmsOnAndroid: true,
                         defaultPinTheme: defaultPinTheme,
                         separatorBuilder: (index) => const SizedBox(width: 8),
@@ -136,17 +143,18 @@ class _OtpState extends State<OtpScreen> {
                         onPressed: () async {
                           try {
                             PhoneAuthCredential credential =
-                            await PhoneAuthProvider.credential(
-                                verificationId: widget.verificationId,
-                                smsCode: otpController.text.toString());
+                                await PhoneAuthProvider.credential(
+                                    verificationId: widget.verificationId,
+                                    smsCode: otpController.text.toString());
 
                             FirebaseAuth.instance
                                 .signInWithCredential(credential)
                                 .then((value) => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const HomeScreen())));
-                          }catch(ex){
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomeScreen())));
+                          } catch (ex) {
                             print(ex.toString());
                           }
                         },
