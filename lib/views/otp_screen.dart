@@ -1,7 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
-
 import '../common_widgets/common_elevated_button.dart';
 import '../home_screen.dart';
 
