@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../location/location_screen.dart';
+
 class ParcelRequest extends StatefulWidget {
   @override
   _CreateTripPageState createState() => _CreateTripPageState();
@@ -14,6 +16,9 @@ class _CreateTripPageState extends State<ParcelRequest> {
   late DateTime date;
   double chargePerKm = 5.0;
 
+  // Define startLocation and endLocation variables here
+  String startLocation = '';
+  String endLocation = '';
   @override
   void initState() {
     super.initState();
@@ -25,10 +30,10 @@ class _CreateTripPageState extends State<ParcelRequest> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dilver Parcel'),
+        title: const Text('Dilver Parcel'),
         backgroundColor: Colors.transparent,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.yellow, Colors.white],
               begin: Alignment.topLeft,
@@ -46,68 +51,64 @@ class _CreateTripPageState extends State<ParcelRequest> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           children: <Widget>[
             ListTile(
-              title: Text('ROUTE START POINT'),
-              subtitle: Text('SELECT ROUTE START POINT'),
-              leading: Icon(Icons.location_on, color: Colors.green),
+              title: const Text('ROUTE START POINT'),
+              subtitle: const Text('SELECT ROUTE START POINT'),
+              leading: const Icon(Icons.location_on, color: Colors.green),
               onTap: () => _selectStartPoint(),
             ),
             ListTile(
-              title: Text('ROUTE END POINT'),
-              subtitle: Text('SELECT ROUTE END POINT'),
-              leading: Icon(Icons.location_on, color: Colors.red),
+              title: const Text('ROUTE END POINT'),
+              subtitle: const Text('SELECT ROUTE END POINT'),
+              leading: const Icon(Icons.location_on, color: Colors.red),
               onTap: () => _selectEndPoint(),
             ),
 
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Parcel Type',
                 border: OutlineInputBorder(),
               ),
               onSaved: (value) => tripName = value!,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Weight',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               onSaved: (value) => seatingCapacity = int.tryParse(value!) ?? 0,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Date',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               onSaved: (value) => seatingCapacity = int.tryParse(value!) ?? 0,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Time',
                 border: OutlineInputBorder(),
               ),
-
               keyboardType: TextInputType.number,
               onSaved: (value) => seatingCapacity = int.tryParse(value!) ?? 0,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             // Trip Type Buttons
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-
-
-              ],
+              children: <Widget>[],
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             ElevatedButton(
-              child: Text('Create'),
+              child: const Text('Create'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow, // Background color
                 foregroundColor: Colors.black, // Text Color (Foreground color)
@@ -121,11 +122,33 @@ class _CreateTripPageState extends State<ParcelRequest> {
   }
 
   void _selectStartPoint() {
-    // Implement start point selection
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationScreen(),
+      ),
+    ).then((selectedLocation) {
+      if (selectedLocation != null) {
+        setState(() {
+          startLocation = selectedLocation;
+        });
+      }
+    });
   }
 
   void _selectEndPoint() {
-    // Implement end point selection
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationScreen(),
+      ),
+    ).then((selectedLocation) {
+      if (selectedLocation != null) {
+        setState(() {
+          endLocation = selectedLocation;
+        });
+      }
+    });
   }
 
   void _setTripType(String type) {

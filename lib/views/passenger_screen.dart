@@ -1,10 +1,11 @@
-import 'package:demo_project1/views/widgets/create_parcel_request.dart';
-import 'package:demo_project1/views/ride_view_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:demo_project1/views/driver_screen.dart';
+import 'package:demo_project1/views/location/location_screen.dart';
+import 'package:demo_project1/views/ride_view_screen.dart';
+import 'package:demo_project1/views/widgets/create_parcel_request.dart';
+import 'package:flutter/material.dart';
+
 import 'widgets/bus_scedule.dart';
 import 'widgets/emergency_service.dart';
-
 
 class PassengerScreen extends StatefulWidget {
   const PassengerScreen({super.key});
@@ -28,7 +29,10 @@ class PassengerScreenState extends State<PassengerScreen> {
     });
   }
 
-  Widget _createBoxItem({required String text, required IconData icon, required GestureTapCallback onTap}) {
+  Widget _createBoxItem(
+      {required String text,
+      required IconData icon,
+      required GestureTapCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -84,11 +88,13 @@ class PassengerScreenState extends State<PassengerScreen> {
                 ),
                 accountName: Text(
                   "shaheryar hanif",
-                  style: TextStyle(color: Colors.black), // Set text color to black
+                  style:
+                      TextStyle(color: Colors.black), // Set text color to black
                 ),
                 accountEmail: Text(
                   "sharyarhanif2865@gmail.com",
-                  style: TextStyle(color: Colors.black), // Set text color to black
+                  style:
+                      TextStyle(color: Colors.black), // Set text color to black
                 ),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.black,
@@ -98,12 +104,26 @@ class PassengerScreenState extends State<PassengerScreen> {
                   ),
                 ),
               ),
-
-              _createDrawerItem(icon: Icons.home, text: 'Home', onTap: () => Navigator.pop(context)),
-              _createDrawerItem(icon: Icons.receipt, text: 'Trip Requests', onTap: () => Navigator.pop(context)),
-              _createDrawerItem(icon: Icons.edit, text: 'Edit Profile', onTap: () => Navigator.pop(context)),
-              _createDrawerItem(icon: Icons.exit_to_app, text: 'Logout', onTap: () => Navigator.pop(context)),
-              _createDrawerItem(icon: Icons.security, text: 'Privacy Policy', onTap: () => Navigator.pop(context)),
+              _createDrawerItem(
+                  icon: Icons.home,
+                  text: 'Home',
+                  onTap: () => Navigator.pop(context)),
+              _createDrawerItem(
+                  icon: Icons.receipt,
+                  text: 'Trip Requests',
+                  onTap: () => Navigator.pop(context)),
+              _createDrawerItem(
+                  icon: Icons.edit,
+                  text: 'Edit Profile',
+                  onTap: () => Navigator.pop(context)),
+              _createDrawerItem(
+                  icon: Icons.exit_to_app,
+                  text: 'Logout',
+                  onTap: () => Navigator.pop(context)),
+              _createDrawerItem(
+                  icon: Icons.security,
+                  text: 'Privacy Policy',
+                  onTap: () => Navigator.pop(context)),
               SwitchListTile(
                 title: Text('Driver Mode'),
                 value: false, // this should be a state variable
@@ -135,11 +155,11 @@ class PassengerScreenState extends State<PassengerScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => RideViewScreen(), // Correct usage of constructor
+                  builder: (context) =>
+                      RideViewScreen(), // Correct usage of constructor
                 ),
               );
             },
-
           ),
           _createBoxItem(
             text: 'Parcel Delivery',
@@ -148,7 +168,22 @@ class PassengerScreenState extends State<PassengerScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ParcelRequest(), // Correct usage of constructor
+                  builder: (context) =>
+                      ParcelRequest(), // Correct usage of constructor
+                ),
+              );
+              // Handle the action for Parcel Delivery
+            },
+          ),
+          _createBoxItem(
+            text: 'Location',
+            icon: Icons.location_on,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      LocationScreen(), // Correct usage of constructor
                 ),
               );
               // Handle the action for Parcel Delivery
@@ -161,7 +196,7 @@ class PassengerScreenState extends State<PassengerScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>EmergencyServicePage (),
+                  builder: (context) => EmergencyServicePage(),
                 ),
               );
               // Handle the action for Emergency Service
@@ -174,7 +209,7 @@ class PassengerScreenState extends State<PassengerScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>BusSchedulePage (),
+                  builder: (context) => BusSchedulePage(),
                 ),
               );
               // Handle the action for View Bus Schedule
@@ -204,7 +239,10 @@ class PassengerScreenState extends State<PassengerScreen> {
     );
   }
 
-  Widget _createDrawerItem({required IconData icon, required String text, required GestureTapCallback onTap}) {
+  Widget _createDrawerItem(
+      {required IconData icon,
+      required String text,
+      required GestureTapCallback onTap}) {
     return ListTile(
       leading: Icon(icon),
       title: Text(text),
