@@ -1,7 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
+
+import '../common_widgets/common_elevated_button.dart';
+import '../home_screen.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({required Key key}) : super(key: key);
+  OtpScreen({super.key, required this.verificationId});
+
+  String verificationId;
 
   @override
   _OtpState createState() => _OtpState();
@@ -10,53 +17,65 @@ class OtpScreen extends StatefulWidget {
 class _OtpState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xfff7f6fb),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color.fromARGB(
-                  255, 239, 255, 99), // Change these colors to your preference
-              Color.fromARGB(255, 232, 231, 161),
-            ],
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    final otpController = TextEditingController();
+    final focusNode = FocusNode();
+
+    final defaultPinTheme = PinTheme(
+      width: 56,
+      height: 56,
+      textStyle: const TextStyle(
+        fontSize: 22,
+        color: Color.fromRGBO(30, 60, 87, 1),
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(19),
+        border: Border.all(color: Colors.blue),
+      ),
+    );
+
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color.fromARGB(
+                255, 239, 255, 99), // Change these colors to your preference
+            Color.fromARGB(255, 232, 231, 161),
+          ],
+        ),
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 239, 255, 99),
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Icon(
+              Icons.arrow_back,
+              size: screenWidth * 0.080,
+              color: Colors.black54,
+            ),
           ),
         ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.040),
+            width: double.infinity,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(
-                      Icons.arrow_back,
-                      size: 32,
-                      color: Colors.black54,
-                    ),
-                  ),
+                Image.asset(
+                  'assets/images/illustration-3.png',
+                  height: screenHeight * 0.240,
+                  width: screenWidth * 0.5,
+                  fit: BoxFit.contain,
                 ),
-                const SizedBox(
-                  height: 18,
-                ),
-                Container(
-                  width: 200,
-                  height: 200,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.asset(
-                    'assets/images/illustration-3.png',
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
+                SizedBox(height: screenHeight * 0.020),
                 const Text(
                   'Verification',
                   style: TextStyle(
@@ -64,9 +83,7 @@ class _OtpState extends State<OtpScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: screenHeight * 0.020),
                 const Text(
                   "Enter your OTP code number",
                   style: TextStyle(
@@ -76,10 +93,9 @@ class _OtpState extends State<OtpScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(
-                  height: 28,
-                ),
+                SizedBox(height: screenHeight * 0.030),
                 Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.all(28),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -87,43 +103,58 @@ class _OtpState extends State<OtpScreen> {
                   ),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _textFieldOTP(first: true, last: false),
-                          _textFieldOTP(first: false, last: false),
-                          _textFieldOTP(first: false, last: false),
-                          _textFieldOTP(first: false, last: true),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 22,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.purple),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24.0),
-                              ),
-                            ),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(14.0),
-                            child: Text(
-                              'Verify',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
+                      Pinput(
+                        controller: otpController,
+                        focusNode: focusNode,
+                        androidSmsAutofillMethod: AndroidSmsAutofillMethod.none,
+                        listenForMultipleSmsOnAndroid: true,
+                        defaultPinTheme: defaultPinTheme,
+                        separatorBuilder: (index) => const SizedBox(width: 8),
+                        // validator: (value) {
+                        //   return value == '2222' ? null : 'Pin is incorrect';
+                        // },
+                        // onClipboardFound: (value) {
+                        //   debugPrint('onClipboardFound: $value');
+                        //   pinController.setText(value);
+                        // },
+                        hapticFeedbackType: HapticFeedbackType.lightImpact,
+                        onCompleted: (pin) {
+                          debugPrint('onCompleted: $pin');
+                        },
+                        onChanged: (value) {
+                          debugPrint('onChanged: $value');
+                        },
+                        errorPinTheme: defaultPinTheme.copyBorderWith(
+                          border: Border.all(color: Colors.redAccent),
                         ),
-                      )
+                      ),
+                      SizedBox(height: screenHeight * 0.030),
+                      CommonElevatedButton(
+                        fontSize: screenWidth * 0.045,
+                        borderRadius: 24.0,
+                        width: screenWidth * 0.750,
+                        height: screenHeight * 0.065,
+                        buttonColor: Colors.purple,
+                        textColor: Colors.white,
+                        onPressed: () async {
+                          try {
+                            PhoneAuthCredential credential =
+                            await PhoneAuthProvider.credential(
+                                verificationId: widget.verificationId,
+                                smsCode: otpController.text.toString());
+
+                            FirebaseAuth.instance
+                                .signInWithCredential(credential)
+                                .then((value) => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const HomeScreen())));
+                          }catch(ex){
+                            print(ex.toString());
+                          }
+                        },
+                        text: "Verify",
+                      ),
                     ],
                   ),
                 ),
@@ -139,9 +170,7 @@ class _OtpState extends State<OtpScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(
-                  height: 18,
-                ),
+                SizedBox(height: screenHeight * 0.020),
                 const Text(
                   "Resend New Code",
                   style: TextStyle(
@@ -152,43 +181,6 @@ class _OtpState extends State<OtpScreen> {
                   textAlign: TextAlign.center,
                 ),
               ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _textFieldOTP({required bool first, bool? last}) {
-    return Expanded(
-      child: AspectRatio(
-        aspectRatio: 1.0,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0),
-          child: TextField(
-            autofocus: true,
-            onChanged: (value) {
-              if (value.length == 1 && last == false) {
-                FocusScope.of(context).nextFocus();
-              }
-              if (value.length == 0 && first == false) {
-                FocusScope.of(context).previousFocus();
-              }
-            },
-            showCursor: false,
-            readOnly: false,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            keyboardType: TextInputType.number,
-            maxLength: 1,
-            decoration: InputDecoration(
-              counter: const Offstage(),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 2, color: Colors.black12),
-                  borderRadius: BorderRadius.circular(12)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 2, color: Colors.purple),
-                  borderRadius: BorderRadius.circular(12)),
             ),
           ),
         ),
