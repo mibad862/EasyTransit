@@ -1,4 +1,3 @@
-import 'package:demo_project1/views/otp_screen.dart';
 import 'package:flutter/material.dart';
 
 class OtpLogin extends StatefulWidget {
@@ -126,14 +125,11 @@ class _RegisterState extends State<OtpLogin> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
+
                           onPressed: () {
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //       builder: (context) => OtpScreen(
-                            //             key: UniqueKey(),
-                            //           )),
-                            // );
+
                           },
+
                           style: ButtonStyle(
                             foregroundColor:
                                 MaterialStateProperty.all<Color>(Colors.white),

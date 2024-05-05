@@ -1,3 +1,4 @@
+import 'package:demo_project1/views/location/location_screen.dart';
 import 'package:flutter/material.dart';
 
 class CreateTripPage extends StatefulWidget {
@@ -92,7 +93,6 @@ class _CreateTripPageState extends State<CreateTripPage> {
                 labelText: 'Time',
                 border: OutlineInputBorder(),
               ),
-
               keyboardType: TextInputType.number,
               onSaved: (value) => seatingCapacity = int.tryParse(value!) ?? 0,
             ),
@@ -104,14 +104,16 @@ class _CreateTripPageState extends State<CreateTripPage> {
                 ElevatedButton(
                   onPressed: () => _setTripType('One Time'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: tripType == 'One Time' ? Colors.yellow : Colors.grey,
+                    backgroundColor:
+                        tripType == 'One Time' ? Colors.yellow : Colors.grey,
                   ),
                   child: Text('One Time'),
                 ),
                 ElevatedButton(
                   onPressed: () => _setTripType('Daily'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: tripType == 'Daily' ? Colors.yellow : Colors.grey,
+                    backgroundColor:
+                        tripType == 'Daily' ? Colors.yellow : Colors.grey,
                   ),
                   child: Text('Daily'),
                 ),
@@ -133,11 +135,33 @@ class _CreateTripPageState extends State<CreateTripPage> {
   }
 
   void _selectStartPoint() {
-    // Implement start point selection
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationScreen(),
+      ),
+    ).then((selectedLocation) {
+      if (selectedLocation != null) {
+        setState(() {
+          //  startLocation = selectedLocation;
+        });
+      }
+    });
   }
 
   void _selectEndPoint() {
-    // Implement end point selection
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationScreen(),
+      ),
+    ).then((selectedLocation) {
+      if (selectedLocation != null) {
+        setState(() {
+          // endLocation = selectedLocation;
+        });
+      }
+    });
   }
 
   void _setTripType(String type) {
