@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../common_widgets/common_elevated_button.dart';
+import 'authentication/email_register_screen.dart';
 import 'otp_screen.dart';
 
 class OTPRegisterScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class OTPRegisterScreen extends StatefulWidget {
 }
 
 class RegisterState extends State<OTPRegisterScreen> {
-  final  phoneNumberController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isInputValid = false;
 
@@ -35,7 +36,7 @@ class RegisterState extends State<OTPRegisterScreen> {
         body: SafeArea(
           child: Container(
             width: double.infinity,
-            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.085),
+            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.085, vertical: screenHeight * 0.020),
             child: Form(
               key: _formKey,
               child: SingleChildScrollView(
@@ -49,6 +50,49 @@ class RegisterState extends State<OTPRegisterScreen> {
                     _buildDescriptionText(screenWidth),
                     SizedBox(height: screenHeight * 0.040),
                     _buildForm(screenHeight, screenWidth, context),
+                    SizedBox(height: screenHeight * 0.020),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Divider(
+                          color: Colors.black,
+                          thickness: 3.0,
+                        ),
+                        Text(
+                          'OR',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.060,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.black,
+                          thickness: 3.0,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: screenHeight * 0.020),
+                    InkWell(
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EmailRegisterScreen())),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        height: screenHeight * 0.055,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Text(
+                          'REGISTER WITH EMAIL',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.040,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -190,7 +234,8 @@ class RegisterState extends State<OTPRegisterScreen> {
             buttonColor: Colors.purple,
             textColor: Colors.white,
             onPressed: () async {
-              final phoneController = '+92${phoneNumberController.text.trim()}';
+              final phoneController =
+                  '+92${phoneNumberController.text.toString()}';
               await FirebaseAuth.instance.verifyPhoneNumber(
                   verificationCompleted: (PhoneAuthCredential credential) {},
                   verificationFailed: (FirebaseAuthException ex) {},
