@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'authentication/email_login_screen.dart';
+import 'authentication/email_register_screen.dart';
+
 class OtpLogin extends StatefulWidget {
-  const OtpLogin({required Key key}) : super(key: key);
+  const OtpLogin({super.key});
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -10,6 +13,10 @@ class OtpLogin extends StatefulWidget {
 class _RegisterState extends State<OtpLogin> {
   @override
   Widget build(BuildContext context) {
+
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xfff7f6fb),
@@ -150,7 +157,50 @@ class _RegisterState extends State<OtpLogin> {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      SizedBox(height: screenHeight * 0.020),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Divider(
+                            color: Colors.black,
+                            thickness: 3.0,
+                          ),
+                          Text(
+                            'OR',
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.060,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.black,
+                            thickness: 3.0,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.020),
+                      InkWell(
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EmailLoginScreen())),
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: double.infinity,
+                          height: screenHeight * 0.055,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Text(
+                            'LOGIN WITH EMAIL',
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.040,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
