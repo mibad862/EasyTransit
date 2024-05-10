@@ -4,11 +4,13 @@ class CustomTextField extends StatelessWidget {
   final String labelText;
   final TextEditingController controller;
   final TextInputType keyboardType;
+  final String? Function(String?)? validator; // Validation function
 
   const CustomTextField({
     required this.labelText,
     required this.controller,
     this.keyboardType = TextInputType.text,
+    this.validator, // Validator parameter
   });
 
   @override
@@ -20,6 +22,7 @@ class CustomTextField extends StatelessWidget {
         labelText: labelText,
         border: OutlineInputBorder(),
       ),
+      validator: validator, // Assign the validator function
     );
   }
 }

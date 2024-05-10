@@ -1,4 +1,6 @@
 import 'package:demo_project1/common_widgets/common_elevated_button.dart';
+import 'package:demo_project1/common_widgets/common_snackbar.dart';
+import 'package:demo_project1/common_widgets/custom_text_field.dart';
 import 'package:demo_project1/views/home_screen.dart';
 import 'package:demo_project1/views/widgets/custom_email_textfield.dart';
 import 'package:demo_project1/views/widgets/custom_password_textfield.dart';
@@ -24,7 +26,7 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
   bool isSubmit = false;
   final _formKey = GlobalKey<FormState>();
 
-  Future<void> _submit() async {
+  Future<void> _submit(BuildContext context) async {
     setState(() {
       isSubmit = true; // Set to true to show loading indicator
     });
@@ -105,11 +107,75 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        'Forgotten password?',
-                        style: TextStyle(fontSize: 15.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Forgot Password"),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Enter your email to receive a password reset link.",
+                                  ),
+                                  SizedBox(height: 10),
+                                  CustomTextField(
+                                    controller: emailController,
+                                    labelText: "Email Address",
+                                  ),
+                                  SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      // Handle the password reset logic
+                                      try {
+                                        await FirebaseAuth.instance
+                                            .sendPasswordResetEmail(
+                                          email: emailController.text,
+                                        );
+                                        Navigator.pop(context);
+                                        // CustomSnackbar(
+                                        //   context:
+                                        //   title: 'Password Reset Email Sent',
+                                        //   body:
+                                        //       'Please check your email for instructions.',
+                                        //   contentType: ContentType.success,
+                                        // );
+
+                                        CustomSnackbar.show(
+                                            context,
+                                            'Password Reset Email Sent',
+                                            SnackbarType.success);
+                                      } catch (e) {
+                                        print("Error: $e");
+                                        // showCustomMaterialBanner(
+                                        //   context: context,
+                                        //   title: 'Password Reset Failed',
+                                        //   body: 'Failed to send reset email.',
+                                        //   contentType: ContentType.failure,
+                                        // );
+
+                                        CustomSnackbar.show(
+                                            context,
+                                            'Failed to send reset email',
+                                            SnackbarType.error);
+                                      }
+                                    },
+                                    child: Text("Reset Password"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
@@ -118,10 +184,11 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                     fontSize: 15,
                     height: screenHeight * 0.065,
                     width: double.infinity,
-                    onPressed: _submit,
+                    onPressed: () {
+                      _submit(context);
+                    },
                     text: isSubmit ? 'Logging In....' : 'Login',
                   ),
-
                   SizedBox(
                     height: screenHeight * 0.210,
                   ),

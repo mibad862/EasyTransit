@@ -1,5 +1,9 @@
+import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/views/location/location_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../location/provider/location_provider.dart';
 
 class CreateTripPage extends StatefulWidget {
   @override
@@ -7,6 +11,8 @@ class CreateTripPage extends StatefulWidget {
 }
 
 class _CreateTripPageState extends State<CreateTripPage> {
+  late String startLocation;
+  late String endLocation;
   final _formKey = GlobalKey<FormState>();
   String tripName = '';
   int seatingCapacity = 0;
@@ -17,6 +23,8 @@ class _CreateTripPageState extends State<CreateTripPage> {
 
   @override
   void initState() {
+    startLocation = '';
+    endLocation = '';
     super.initState();
     time = TimeOfDay.now();
     date = DateTime.now();
@@ -25,42 +33,78 @@ class _CreateTripPageState extends State<CreateTripPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Create Trip'),
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.yellow, Colors.white],
-              begin: Alignment.topLeft,
-              end: Alignment.topRight,
-            ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: const CommonAppBar(title: "Create Trip", showicon: true),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: EdgeInsets.all(16.0),
           children: <Widget>[
-            ListTile(
-              title: Text('ROUTE START POINT'),
-              subtitle: Text('SELECT ROUTE START POINT'),
-              leading: Icon(Icons.location_on, color: Colors.green),
-              onTap: () => _selectStartPoint(),
+            const Text(
+              'ROUTE START POINT',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            ListTile(
-              title: Text('ROUTE END POINT'),
-              subtitle: Text('SELECT ROUTE END POINT'),
-              leading: Icon(Icons.location_on, color: Colors.red),
-              onTap: () => _selectEndPoint(),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: _selectStartPoint,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.location_on, color: Colors.green),
+                    const SizedBox(width: 8),
+                    FittedBox(
+                      fit: BoxFit.none,
+                      child: Text(
+                        startLocation.isNotEmpty
+                            ? startLocation
+                            : 'SELECT ROUTE START POINT',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: startLocation.isNotEmpty
+                                ? Colors.black
+                                : Colors.grey),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
+            const SizedBox(height: 16),
+            const Text(
+              'ROUTE END POINT',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: _selectEndPoint,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.location_on, color: Colors.red),
+                    const SizedBox(width: 8),
+                    Text(
+                      endLocation.isNotEmpty
+                          ? endLocation
+                          : 'SELECT ROUTE END POINT',
+                      style: TextStyle(
+                          color: endLocation.isNotEmpty
+                              ? Colors.black
+                              : Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
 
             TextFormField(
               decoration: InputDecoration(
@@ -78,25 +122,48 @@ class _CreateTripPageState extends State<CreateTripPage> {
               keyboardType: TextInputType.number,
               onSaved: (value) => seatingCapacity = int.tryParse(value!) ?? 0,
             ),
-            SizedBox(height: 24),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Date',
-                border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            InkWell(
+              onTap: _selectDate,
+              child: InputDecorator(
+                decoration: const InputDecoration(
+                  labelText: 'Date',
+                  border: OutlineInputBorder(),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '${date.year}-${date.month}-${date.day}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const Icon(Icons.calendar_today),
+                  ],
+                ),
               ),
-              keyboardType: TextInputType.number,
-              onSaved: (value) => seatingCapacity = int.tryParse(value!) ?? 0,
             ),
-            SizedBox(height: 24),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Time',
-                border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            InkWell(
+              onTap: _selectTime,
+              child: InputDecorator(
+                decoration: const InputDecoration(
+                  labelText: 'Time',
+                  border: OutlineInputBorder(),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '${time.hour}:${time.minute}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const Icon(Icons.access_time),
+                  ],
+                ),
               ),
-              keyboardType: TextInputType.number,
-              onSaved: (value) => seatingCapacity = int.tryParse(value!) ?? 0,
             ),
-            SizedBox(height: 24),
+
+            const SizedBox(height: 24),
             // Trip Type Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -140,12 +207,14 @@ class _CreateTripPageState extends State<CreateTripPage> {
       MaterialPageRoute(
         builder: (context) => LocationScreen(),
       ),
-    ).then((selectedLocation) {
-      if (selectedLocation != null) {
-        setState(() {
-          //  startLocation = selectedLocation;
-        });
-      }
+    ).then((_) {
+      final locationProvider =
+          Provider.of<LocationProvider>(context, listen: false);
+      setState(() {
+        startLocation =
+            locationProvider.getStartAddress ?? 'SELECT ROUTE START POINT';
+        print(startLocation);
+      });
     });
   }
 
@@ -155,12 +224,14 @@ class _CreateTripPageState extends State<CreateTripPage> {
       MaterialPageRoute(
         builder: (context) => LocationScreen(),
       ),
-    ).then((selectedLocation) {
-      if (selectedLocation != null) {
-        setState(() {
-          // endLocation = selectedLocation;
-        });
-      }
+    ).then((_) {
+      final locationProvider =
+          Provider.of<LocationProvider>(context, listen: false);
+      setState(() {
+        endLocation =
+            locationProvider.getEndAddress ?? 'SELECT ROUTE END POINT';
+        print(endLocation);
+      });
     });
   }
 
@@ -180,6 +251,32 @@ class _CreateTripPageState extends State<CreateTripPage> {
       print('Trip Type: $tripType');
       print('Charge per Km: $chargePerKm');
       // Implement the rest of the submission logic here
+    }
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 10),
+    );
+    if (pickedDate != null && pickedDate != date) {
+      setState(() {
+        date = pickedDate;
+      });
+    }
+  }
+
+  Future<void> _selectTime() async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: time,
+    );
+    if (pickedTime != null && pickedTime != time) {
+      setState(() {
+        time = pickedTime;
+      });
     }
   }
 }
