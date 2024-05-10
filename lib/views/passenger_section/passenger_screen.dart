@@ -1,10 +1,12 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/views/bus_schedule/bus_schedule.dart';
 import 'package:demo_project1/views/dilver_parcel_screen/create_parcel_request.dart';
-import 'package:demo_project1/views/driver_screen.dart';
+import 'package:demo_project1/views/driver_section/driver_screen.dart';
 import 'package:demo_project1/views/ride_view_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'widgets/emergency_service.dart';
+
+import '../emergency_screen.dart/emergency_service.dart';
 
 class PassengerScreen extends StatefulWidget {
   const PassengerScreen({super.key});
@@ -118,9 +120,20 @@ class PassengerScreenState extends State<PassengerScreen> {
                   text: 'Edit Profile',
                   onTap: () => Navigator.pop(context)),
               _createDrawerItem(
-                  icon: Icons.exit_to_app,
-                  text: 'Logout',
-                  onTap: () => Navigator.pop(context)),
+                icon: Icons.exit_to_app,
+                text: 'Logout',
+                onTap: () {
+                  FirebaseAuth.instance.signOut().then((_) {
+                    Navigator.pop(context); // Close the drawer
+                    Navigator.pushReplacementNamed(
+                        context, '/login'); // Navigate to login screen
+                  }).catchError((error) {
+                    
+                    print("Error signing out: $error");
+                    // Handle error if any
+                  });
+                },
+              ),
               _createDrawerItem(
                   icon: Icons.security,
                   text: 'Privacy Policy',
@@ -220,16 +233,16 @@ class PassengerScreenState extends State<PassengerScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.star),
             label: 'Rating',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),

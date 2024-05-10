@@ -1,4 +1,5 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
+import 'package:demo_project1/services/firebase_firestore_services.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,6 +39,16 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
     print('Name: ${_nameController.text}');
     print('Location: ${_locationController.text}');
     print('Time: ${_timeController.text}');
+
+    FirebaseFirestoreService().storeAmbulanceBooking(
+        context,
+        _nameController.text.toString(),
+        _locationController.text.toString(),
+        _timeController.text.toString());
+
+    _nameController.text = "";
+    _locationController.text = "";
+    _timeController.text = "";
   }
 
   @override
@@ -50,11 +61,11 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
           children: [
             ElevatedButton(
               onPressed: _makePhoneCall,
-              child: const Text('Call Ambulance'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red, // Background color
                 foregroundColor: Colors.white, // Text Color (Foreground color)
               ),
+              child: const Text('Call Ambulance'),
             ),
             const SizedBox(height: 20),
             TextField(
@@ -103,11 +114,11 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _preBookAmbulance,
-              child: const Text('Pre-Book Ambulance'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow, // Background color
                 foregroundColor: Colors.black, // Text Color (Foreground color)
               ),
+              child: const Text('Pre-Book Ambulance'),
             ),
           ],
         ),

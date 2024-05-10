@@ -32,7 +32,7 @@ import 'package:place_picker/place_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../model/admin_commission.dart';
+import '../model/admin_commission.dart';
 import 'show_toast_dialog.dart';
 
 class Constant {
