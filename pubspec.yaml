@@ -59,6 +59,7 @@ dependencies:
   cloud_firestore:
   google_fonts:
   shared_preferences:
+  get:
 
 
   
