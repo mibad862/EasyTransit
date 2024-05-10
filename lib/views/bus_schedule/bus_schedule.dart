@@ -1,3 +1,4 @@
+import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:flutter/material.dart';
 
 class BusSchedule {
@@ -21,14 +22,31 @@ class BusSchedulePage extends StatefulWidget {
 
 class _BusSchedulePageState extends State<BusSchedulePage> {
   List<BusSchedule> allSchedules = [
-    BusSchedule(route: 'Lahore to Faisalabad', firstDepartureTime: '05:00 AM', lastDepartureTime: '11:00 PM', ticketPrice: 1000),
-    BusSchedule(route: 'Lahore to Multan', firstDepartureTime: '05:00 AM', lastDepartureTime: '02:30 AM', ticketPrice: 1800),
-    BusSchedule(route: 'Lahore to Islamabad', firstDepartureTime: '05:00 AM', lastDepartureTime: '02:30 AM', ticketPrice: 2000),
+    BusSchedule(
+        route: 'Lahore to Faisalabad',
+        firstDepartureTime: '05:00 AM',
+        lastDepartureTime: '11:00 PM',
+        ticketPrice: 1000),
+    BusSchedule(
+        route: 'Lahore to Multan',
+        firstDepartureTime: '05:00 AM',
+        lastDepartureTime: '02:30 AM',
+        ticketPrice: 1800),
+    BusSchedule(
+        route: 'Lahore to Islamabad',
+        firstDepartureTime: '05:00 AM',
+        lastDepartureTime: '02:30 AM',
+        ticketPrice: 2000),
     // Add more dummy data...
   ];
   List<BusSchedule> displayedSchedules = [];
   String selectedCompany = 'All';
-  final List<String> companies = ['All', 'Daewoo', 'Niazi Express', 'Faisal Movers'];
+  final List<String> companies = [
+    'All',
+    'Daewoo',
+    'Niazi Express',
+    'Faisal Movers'
+  ];
   String searchText = '';
 
   @override
@@ -40,8 +58,12 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
   void filterSchedules() {
     setState(() {
       displayedSchedules = allSchedules.where((schedule) {
-        final searchMatch = schedule.route.toLowerCase().contains(searchText.toLowerCase());
-        final companyMatch = selectedCompany == 'All' || schedule.route.toLowerCase().contains(selectedCompany.toLowerCase());
+        final searchMatch =
+            schedule.route.toLowerCase().contains(searchText.toLowerCase());
+        final companyMatch = selectedCompany == 'All' ||
+            schedule.route
+                .toLowerCase()
+                .contains(selectedCompany.toLowerCase());
         return searchMatch && companyMatch;
       }).toList();
     });
@@ -50,22 +72,7 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Bus Schedule'),
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.yellow, Colors.white],
-              begin: Alignment.topLeft,
-              end: Alignment.topRight,
-            ),
-          ),
-        ),
-        actions: [
-
-        ],
-      ),
+      appBar: const CommonAppBar(title: "Bus Schedule", showicon: true),
       body: Column(
         children: [
           Padding(
@@ -75,7 +82,7 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
                 searchText = value;
                 filterSchedules();
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search for routes',
                 suffixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(

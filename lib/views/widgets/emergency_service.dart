@@ -1,3 +1,4 @@
+import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,69 +43,50 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Emergency Service'),
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.yellow, Colors.white],
-              begin: Alignment.topLeft,
-              end: Alignment.topRight,
-            ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: const CommonAppBar(title: "Emergency Service", showicon: true),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             ElevatedButton(
               onPressed: _makePhoneCall,
-              child: Text('Call Ambulance'),
+              child: const Text('Call Ambulance'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red, // Background color
                 foregroundColor: Colors.white, // Text Color (Foreground color)
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Name',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Location',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: _locationController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Date',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: _timeController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Desired Time for Ambulance',
                 border: OutlineInputBorder(),
               ),
-
               onTap: () async {
                 // Prevent Keyboard from appearing
                 FocusScope.of(context).requestFocus(new FocusNode());
@@ -118,10 +100,10 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
                 }
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _preBookAmbulance,
-              child: Text('Pre-Book Ambulance'),
+              child: const Text('Pre-Book Ambulance'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow, // Background color
                 foregroundColor: Colors.black, // Text Color (Foreground color)
@@ -133,4 +115,3 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
     );
   }
 }
-

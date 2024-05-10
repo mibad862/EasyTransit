@@ -1,10 +1,9 @@
+import 'package:demo_project1/common_widgets/common_appbar.dart';
+import 'package:demo_project1/views/bus_schedule/bus_schedule.dart';
+import 'package:demo_project1/views/dilver_parcel_screen/create_parcel_request.dart';
 import 'package:demo_project1/views/driver_screen.dart';
-import 'package:demo_project1/views/location/location_screen.dart';
 import 'package:demo_project1/views/ride_view_screen.dart';
-import 'package:demo_project1/views/widgets/create_parcel_request.dart';
 import 'package:flutter/material.dart';
-
-import 'widgets/bus_scedule.dart';
 import 'widgets/emergency_service.dart';
 
 class PassengerScreen extends StatefulWidget {
@@ -31,23 +30,30 @@ class PassengerScreenState extends State<PassengerScreen> {
 
   Widget _createBoxItem(
       {required String text,
-      required IconData icon,
+      required String imgPath,
       required GestureTapCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         color: Colors.white,
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 48.0, color: Colors.black),
-            SizedBox(height: 8.0),
-            Text(
-              text,
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.black,
+            Image.asset(
+              imgPath,
+              fit: BoxFit.cover,
+              height: 50,
+            ),
+            const SizedBox(height: 8.0),
+            FittedBox(
+              fit: BoxFit.none,
+              child: Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black,
+                ),
               ),
             ),
           ],
@@ -58,21 +64,16 @@ class PassengerScreenState extends State<PassengerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final yellowGradient = LinearGradient(
+    final yellowGradient = const LinearGradient(
       colors: [Colors.yellow, Colors.white],
       begin: Alignment.topLeft,
       end: Alignment.topRight,
     );
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: yellowGradient,
-          ),
-        ),
-        title: Text('Passenger Screen'),
+      appBar: const CommonAppBar(
+        title: "Passenger Screen",
+        showicon: false,
       ),
       drawer: Drawer(
         child: Container(
@@ -86,17 +87,17 @@ class PassengerScreenState extends State<PassengerScreen> {
                 decoration: BoxDecoration(
                   gradient: yellowGradient,
                 ),
-                accountName: Text(
+                accountName: const Text(
                   "shaheryar hanif",
                   style:
                       TextStyle(color: Colors.black), // Set text color to black
                 ),
-                accountEmail: Text(
+                accountEmail: const Text(
                   "sharyarhanif2865@gmail.com",
                   style:
                       TextStyle(color: Colors.black), // Set text color to black
                 ),
-                currentAccountPicture: CircleAvatar(
+                currentAccountPicture: const CircleAvatar(
                   backgroundColor: Colors.black,
                   child: Text(
                     'S',
@@ -125,19 +126,19 @@ class PassengerScreenState extends State<PassengerScreen> {
                   text: 'Privacy Policy',
                   onTap: () => Navigator.pop(context)),
               SwitchListTile(
-                title: Text('Driver Mode'),
+                title: const Text('Driver Mode'),
                 value: false, // this should be a state variable
                 onChanged: (bool value) {
                   // Update the state of the app
                   if (value) {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => DriverScreen(),
+                      builder: (context) => const DriverScreen(),
                     ));
                   } else {
                     // Handle turning off Passenger Mode
                   }
                 },
-                secondary: Icon(Icons.directions_car),
+                secondary: const Icon(Icons.directions_car),
               ),
             ],
           ),
@@ -145,12 +146,12 @@ class PassengerScreenState extends State<PassengerScreen> {
       ),
       body: GridView.count(
         crossAxisCount: 2,
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         childAspectRatio: 1.2,
         children: [
           _createBoxItem(
             text: 'Ride Book',
-            icon: Icons.directions_car,
+            imgPath: "assets/images/3d-car.png",
             onTap: () {
               Navigator.push(
                 context,
@@ -163,7 +164,7 @@ class PassengerScreenState extends State<PassengerScreen> {
           ),
           _createBoxItem(
             text: 'Parcel Delivery',
-            icon: Icons.local_shipping,
+            imgPath: "assets/images/3d-truck.png",
             onTap: () {
               Navigator.push(
                 context,
@@ -175,23 +176,24 @@ class PassengerScreenState extends State<PassengerScreen> {
               // Handle the action for Parcel Delivery
             },
           ),
-          _createBoxItem(
-            text: 'Location',
-            icon: Icons.location_on,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      LocationScreen(), // Correct usage of constructor
-                ),
-              );
-              // Handle the action for Parcel Delivery
-            },
-          ),
+          // _createBoxItem(
+          //   text: 'Location',
+          //   imgPath: "assets/images/3d-car.png",
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) =>
+          //             LocationScreen(), // Correct usage of constructor
+          //       ),
+          //     );
+          //     // Handle the action for Parcel Delivery
+          //   },
+          // ),
+
           _createBoxItem(
             text: 'Emergency Service',
-            icon: Icons.local_hospital,
+            imgPath: "assets/images/ambulance.png",
             onTap: () {
               Navigator.push(
                 context,
@@ -204,7 +206,7 @@ class PassengerScreenState extends State<PassengerScreen> {
           ),
           _createBoxItem(
             text: 'View Bus Schedule',
-            icon: Icons.directions_bus,
+            imgPath: "assets/images/van.png",
             onTap: () {
               Navigator.push(
                 context,
@@ -219,15 +221,15 @@ class PassengerScreenState extends State<PassengerScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.star),
             label: 'Rating',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
@@ -254,7 +256,7 @@ class PassengerScreenState extends State<PassengerScreen> {
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text(
         'Home Screen Content',
         style: TextStyle(
@@ -269,7 +271,7 @@ class HomeScreen extends StatelessWidget {
 class RatingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text(
         'Rating Screen Content',
         style: TextStyle(
@@ -284,7 +286,7 @@ class RatingScreen extends StatelessWidget {
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text(
         'Profile Screen Content',
         style: TextStyle(

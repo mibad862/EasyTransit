@@ -1,17 +1,18 @@
+import 'package:demo_project1/views/bus_schedule/bus_schedule.dart';
 import 'package:demo_project1/views/widgets/emergency_service.dart';
 import 'package:demo_project1/views/widgets/parcel_delivery.dart';
 import 'package:flutter/material.dart';
 
 import 'passenger_screen.dart'; // Import the passenger screen file
-import 'widgets/bus_scedule.dart';
 import 'widgets/create_ride.dart';
 
 class DriverScreen extends StatelessWidget {
-  const DriverScreen({super.key}); // Added to manage the current index of the bottom navigation bar
+  const DriverScreen(
+      {super.key}); // Added to manage the current index of the bottom navigation bar
 
   @override
   Widget build(BuildContext context) {
-  int _currentIndex = 0;
+    int _currentIndex = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +30,8 @@ class DriverScreen extends StatelessWidget {
       ),
       drawer: buildDrawer(context), // Use a separate method for the drawer
       body: buildBody(context), // Use a separate method for the body
-      bottomNavigationBar: BottomNavigationBar( // Add the bottom navigation bar
+      bottomNavigationBar: BottomNavigationBar(
+        // Add the bottom navigation bar
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
@@ -104,13 +106,30 @@ class DriverScreen extends StatelessWidget {
                 ),
               ),
             ),
-
-            _createDrawerItem(icon: Icons.home, text: 'Home', onTap: () => Navigator.pop(context)),
-            _createDrawerItem(icon: Icons.add_circle, text: 'Create Trip', onTap: () => Navigator.pop(context)),
-            _createDrawerItem(icon: Icons.receipt, text: 'Trip Requests', onTap: () => Navigator.pop(context)),
-            _createDrawerItem(icon: Icons.edit, text: 'Edit Profile', onTap: () => Navigator.pop(context)),
-            _createDrawerItem(icon: Icons.exit_to_app, text: 'Logout', onTap: () => Navigator.pop(context)),
-            _createDrawerItem(icon: Icons.security, text: 'Privacy Policy', onTap: () => Navigator.pop(context)),
+            _createDrawerItem(
+                icon: Icons.home,
+                text: 'Home',
+                onTap: () => Navigator.pop(context)),
+            _createDrawerItem(
+                icon: Icons.add_circle,
+                text: 'Create Trip',
+                onTap: () => Navigator.pop(context)),
+            _createDrawerItem(
+                icon: Icons.receipt,
+                text: 'Trip Requests',
+                onTap: () => Navigator.pop(context)),
+            _createDrawerItem(
+                icon: Icons.edit,
+                text: 'Edit Profile',
+                onTap: () => Navigator.pop(context)),
+            _createDrawerItem(
+                icon: Icons.exit_to_app,
+                text: 'Logout',
+                onTap: () => Navigator.pop(context)),
+            _createDrawerItem(
+                icon: Icons.security,
+                text: 'Privacy Policy',
+                onTap: () => Navigator.pop(context)),
             SwitchListTile(
               title: Text('Passenger Mode'),
               value: false, // this should be a state variable
@@ -132,7 +151,10 @@ class DriverScreen extends StatelessWidget {
     );
   }
 
-  Widget _createDrawerItem({required IconData icon, required String text, required GestureTapCallback onTap}) {
+  Widget _createDrawerItem(
+      {required IconData icon,
+      required String text,
+      required GestureTapCallback onTap}) {
     return ListTile(
       leading: Icon(icon),
       title: Text(text),
@@ -159,7 +181,7 @@ class DriverScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>CreateTripPage (),
+                builder: (context) => CreateTripPage(),
               ),
             );
           },
@@ -171,7 +193,7 @@ class DriverScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>ParcelDelivery (),
+                builder: (context) => ParcelDelivery(),
               ),
             );
             // Handle the action for Parcel Delivery
@@ -184,7 +206,7 @@ class DriverScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>EmergencyServicePage (),
+                builder: (context) => EmergencyServicePage(),
               ),
             );
             // Handle the action for Emergency Service
@@ -197,7 +219,7 @@ class DriverScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>BusSchedulePage (),
+                builder: (context) => BusSchedulePage(),
               ),
             );
             // Handle the action for Bus Schedule
@@ -207,7 +229,10 @@ class DriverScreen extends StatelessWidget {
     );
   }
 
-  Widget _createBoxItem({required String text, required IconData icon, required GestureTapCallback onTap}) {
+  Widget _createBoxItem(
+      {required String text,
+      required IconData icon,
+      required GestureTapCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

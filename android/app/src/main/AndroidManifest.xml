@@ -6,7 +6,7 @@
 
     <application
 
-        android:label="demo_project1"
+        android:label="EasyTransit"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
