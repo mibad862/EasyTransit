@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'passenger_section/passenger_screen.dart'; // Import the passenger screen file
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

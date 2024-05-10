@@ -1,9 +1,11 @@
+import 'package:demo_project1/views/location/provider/location_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../common_widgets/common_appbar.dart';
-import '../../common_widgets/common_text_field.dart';
-import '../location/location_screen.dart';
+import '../../common_widgets/custom_text_field.dart';
 import '../../services/firebase_firestore_services.dart';
+import '../location/location_screen.dart';
 
 class ParcelRequest extends StatefulWidget {
   @override
@@ -70,14 +72,18 @@ class _ParcelRequestState extends State<ParcelRequest> {
                       children: [
                         const Icon(Icons.location_on, color: Colors.green),
                         const SizedBox(width: 8),
-                        Text(
-                          startLocation.isNotEmpty
-                              ? startLocation
-                              : 'SELECT ROUTE START POINT',
-                          style: TextStyle(
-                              color: startLocation.isNotEmpty
-                                  ? Colors.black
-                                  : Colors.grey),
+                        FittedBox(
+                          fit: BoxFit.none,
+                          child: Text(
+                            startLocation.isNotEmpty
+                                ? startLocation
+                                : 'SELECT ROUTE START POINT',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: startLocation.isNotEmpty
+                                    ? Colors.black
+                                    : Colors.grey),
+                          ),
                         ),
                       ],
                     ),
@@ -124,6 +130,12 @@ class _ParcelRequestState extends State<ParcelRequest> {
                   labelText: 'Weight',
                   controller: seatingCapacityController,
                   keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Parcel Type is required';
+                    }
+                    return null; // Return null if validation succeeds
+                  },
                 ),
                 const SizedBox(height: 16),
                 InkWell(
@@ -165,6 +177,7 @@ class _ParcelRequestState extends State<ParcelRequest> {
                     ),
                   ),
                 ),
+                
                 const SizedBox(height: 24),
                 Center(
                   child: SizedBox(
@@ -221,12 +234,14 @@ class _ParcelRequestState extends State<ParcelRequest> {
       MaterialPageRoute(
         builder: (context) => LocationScreen(),
       ),
-    ).then((selectedLocation) {
-      if (selectedLocation != null) {
-        setState(() {
-          startLocation = selectedLocation;
-        });
-      }
+    ).then((_) {
+      final locationProvider =
+          Provider.of<LocationProvider>(context, listen: false);
+      setState(() {
+        startLocation =
+            locationProvider.getStartAddress ?? 'SELECT ROUTE START POINT';
+        print(startLocation);
+      });
     });
   }
 
@@ -236,12 +251,14 @@ class _ParcelRequestState extends State<ParcelRequest> {
       MaterialPageRoute(
         builder: (context) => LocationScreen(),
       ),
-    ).then((selectedLocation) {
-      if (selectedLocation != null) {
-        setState(() {
-          endLocation = selectedLocation;
-        });
-      }
+    ).then((_) {
+      final locationProvider =
+          Provider.of<LocationProvider>(context, listen: false);
+      setState(() {
+        endLocation =
+            locationProvider.getEndAddress ?? 'SELECT ROUTE END POINT';
+        print(endLocation);
+      });
     });
   }
 
