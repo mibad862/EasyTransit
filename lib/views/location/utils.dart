@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:demo_project1/views/constants/constant.dart';
-import 'package:demo_project1/views/constants/show_toast_dialog.dart';
+import 'package:demo_project1/constants/constant.dart';
+import 'package:demo_project1/constants/show_toast_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:geolocator/geolocator.dart';

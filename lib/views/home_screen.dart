@@ -1,13 +1,16 @@
+import 'package:demo_project1/views/driver_section/driver_screen.dart';
 import 'package:flutter/material.dart';
-import 'passenger_screen.dart'; // Import the passenger screen file
-import 'driver_screen.dart'; // Import the driver screen file
+
+import 'passenger_section/passenger_screen.dart'; // Import the passenger screen file
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Set background color to transparent
-      body: Stack( // Use Stack to overlay the background image and content
+      backgroundColor:
+          Colors.transparent, // Set background color to transparent
+      body: Stack(
+        // Use Stack to overlay the background image and content
         children: [
           // Background image
           Image.asset(
@@ -20,11 +23,11 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Spacer(),
-                Spacer(),
-                Spacer(),
-                Spacer(),
-                Text(
+                const Spacer(),
+                const Spacer(),
+                const Spacer(),
+                const Spacer(),
+                const Text(
                   'Use App As',
                   style: TextStyle(
                     fontSize: 25,
@@ -38,46 +41,49 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () {
                         // Handle Passenger button press
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => PassengerScreen(),
+                          builder: (context) => const PassengerScreen(),
                         ));
                       },
-                      child: Container( // Wrap text in a container to set fixed width
-                        width: 120, // Adjust the width as needed
-                        alignment: Alignment.center,
-                        child: Text('PASSENGER'),
-                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontSize: 20,
                         ),
                       ),
+                      child: Container(
+                        // Wrap text in a container to set fixed width
+                        width: 120, // Adjust the width as needed
+                        alignment: Alignment.center,
+                        child: const Text('PASSENGER'),
+                      ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     ElevatedButton(
                       onPressed: () {
                         // Handle Driver button press
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => DriverScreen(), // Navigate to DriverScreen
+                          builder: (context) =>
+                              const DriverScreen(), // Navigate to DriverScreen
                         ));
                       },
-                      child: Container( // Wrap text in a container to set fixed width
-                        width: 120, // Adjust the width as needed
-                        alignment: Alignment.center,
-                        child: Text('DRIVER'),
-                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontSize: 20,
                         ),
+                      ),
+                      child: Container(
+                        // Wrap text in a container to set fixed width
+                        width: 120, // Adjust the width as needed
+                        alignment: Alignment.center,
+                        child: const Text('DRIVER'),
                       ),
                     ),
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
               ],
             ),
           ),

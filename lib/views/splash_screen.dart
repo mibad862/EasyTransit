@@ -1,7 +1,11 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -19,9 +23,20 @@ class _SplashScreenState extends State<SplashScreen> {
       });
     });
 
-    // Navigate to the next screen after some delay
-    Timer(Duration(seconds: 4), () {
-      Navigator.pushReplacementNamed(context, '/login');
+    // Check if the current user is null
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    _auth.authStateChanges().listen((User? user) {
+      if (user == null) {
+        // If user is null, navigate to the welcome screen
+        Timer(Duration(seconds: 4), () {
+          Navigator.pushReplacementNamed(context, '/welcome');
+        });
+      } else {
+        // If user is not null, navigate to the home screen
+        Timer(Duration(seconds: 4), () {
+          Navigator.pushReplacementNamed(context, '/home');
+        });
+      }
     });
   }
 
@@ -37,7 +52,8 @@ class _SplashScreenState extends State<SplashScreen> {
           height: screenSize.height,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/easyTransit.png'), // Replace with your actual image path
+              image: AssetImage(
+                  'assets/images/easyTransit.png'), // Replace with your actual image path
               fit: BoxFit.cover,
             ),
           ),

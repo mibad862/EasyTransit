@@ -1,4 +1,5 @@
 import 'package:demo_project1/firebase_options.dart';
+import 'package:demo_project1/home_screen.dart';
 import 'package:demo_project1/views/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => SplashScreen(),
-        '/login': (context) => const Welcome(), // Update to LoginPage
+        '/login': (context) => const Welcome(),
+        '/home': (context) => HomeScreen() // Update to LoginPage
         // '/otp': (context) => const OtpScreen(), // Update to LoginPage
 
         // Add routes for other pages here

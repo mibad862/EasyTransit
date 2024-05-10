@@ -1,6 +1,6 @@
-import 'package:demo_project1/views/passenger_screen.dart';
+import 'package:demo_project1/views/driver_section/driver_screen.dart';
+import 'package:demo_project1/views/passenger_section/passenger_screen.dart';
 import 'package:flutter/material.dart';
-import 'driver_screen.dart'; // Import the driver screen file
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,8 +8,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Set background color to transparent
-      body: Stack( // Use Stack to overlay the background image and content
+      backgroundColor:
+          Colors.transparent, // Set background color to transparent
+      body: Stack(
+        // Use Stack to overlay the background image and content
         children: [
           // Background image
           Image.asset(
@@ -43,13 +45,15 @@ class HomeScreen extends StatelessWidget {
                           builder: (context) => PassengerScreen(),
                         ));
                       },
-                      child: Container( // Wrap text in a container to set fixed width
+                      child: Container(
+                        // Wrap text in a container to set fixed width
                         width: 120, // Adjust the width as needed
                         alignment: Alignment.center,
                         child: Text('PASSENGER'),
                       ),
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black, backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        backgroundColor: Colors.white,
                         textStyle: TextStyle(
                           fontSize: 20,
                         ),
@@ -60,16 +64,19 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () {
                         // Handle Driver button press
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => DriverScreen(), // Navigate to DriverScreen
+                          builder: (context) =>
+                              DriverScreen(), // Navigate to DriverScreen
                         ));
                       },
-                      child: Container( // Wrap text in a container to set fixed width
+                      child: Container(
+                        // Wrap text in a container to set fixed width
                         width: 120, // Adjust the width as needed
                         alignment: Alignment.center,
                         child: Text('DRIVER'),
                       ),
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black, backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        backgroundColor: Colors.white,
                         textStyle: TextStyle(
                           fontSize: 20,
                         ),
