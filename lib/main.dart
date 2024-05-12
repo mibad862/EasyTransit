@@ -1,5 +1,6 @@
 import 'package:demo_project1/firebase_options.dart';
 import 'package:demo_project1/home_screen.dart';
+import 'package:demo_project1/views/authentication/email_register_screen.dart';
 import 'package:demo_project1/views/location/provider/location_provider.dart';
 import 'package:demo_project1/views/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +27,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(
+            fontFamily: "OpenSans",
+            fontSize: 13,
+          ),
+        ),
+      ),
       title: 'EasyTransit App',
       initialRoute: '/',
       routes: {
@@ -34,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const Welcome(),
         '/home': (context) => const HomeScreen(), // Update to LoginPage
         '/welcome': (context) => const Welcome(), // Add the welcome route
+        '/signup': (context) => const EmailRegisterScreen()
 
         // '/otp': (context) => const OtpScreen(), // Update to LoginPage
 

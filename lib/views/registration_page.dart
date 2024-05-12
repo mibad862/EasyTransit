@@ -1,5 +1,5 @@
+import 'package:demo_project1/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'home_screen.dart'; // Import the home screen file
 
 class RegistrationPage extends StatelessWidget {
   @override
@@ -29,7 +29,8 @@ class RegistrationPage extends StatelessWidget {
                         filled: true,
                         border: OutlineInputBorder(),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
                       ),
                     ),
@@ -44,7 +45,8 @@ class RegistrationPage extends StatelessWidget {
                         filled: true,
                         border: OutlineInputBorder(),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
                       ),
                     ),
@@ -59,7 +61,8 @@ class RegistrationPage extends StatelessWidget {
                         filled: true,
                         border: OutlineInputBorder(),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 2.0),
                         ),
                       ),
                       obscureText: true,
@@ -108,7 +111,8 @@ void _signUp(BuildContext context) {
       builder: (context) {
         return AlertDialog(
           title: Text('Success'),
-          content: Text('User added successfully!'), // Your success message here
+          content:
+              Text('User added successfully!'), // Your success message here
           actions: <Widget>[
             TextButton(
               onPressed: () {

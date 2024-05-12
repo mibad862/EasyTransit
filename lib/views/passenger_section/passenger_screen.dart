@@ -1,7 +1,8 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
+import 'package:demo_project1/services/firebase_firestore_services.dart';
 import 'package:demo_project1/views/bus_schedule/bus_schedule.dart';
 import 'package:demo_project1/views/dilver_parcel_screen/create_parcel_request.dart';
-import 'package:demo_project1/views/driver_section/driver_screen.dart';
+import 'package:demo_project1/views/driver_section/driver_mainscreen.dart';
 import 'package:demo_project1/views/ride_view_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,20 +17,6 @@ class PassengerScreen extends StatefulWidget {
 }
 
 class PassengerScreenState extends State<PassengerScreen> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    HomeScreen(), // Example: Home screen
-    RatingScreen(), // Example: Rating screen
-    ProfileScreen(), // Example: Profile screen
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   Widget _createBoxItem(
       {required String text,
       required String imgPath,
@@ -66,7 +53,7 @@ class PassengerScreenState extends State<PassengerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final yellowGradient = const LinearGradient(
+    const yellowGradient = LinearGradient(
       colors: [Colors.yellow, Colors.white],
       begin: Alignment.topLeft,
       end: Alignment.topRight,
@@ -77,86 +64,103 @@ class PassengerScreenState extends State<PassengerScreen> {
         title: "Passenger Screen",
         showicon: false,
       ),
-      drawer: Drawer(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: yellowGradient,
-          ),
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  gradient: yellowGradient,
-                ),
-                accountName: const Text(
-                  "shaheryar hanif",
-                  style:
-                      TextStyle(color: Colors.black), // Set text color to black
-                ),
-                accountEmail: const Text(
-                  "sharyarhanif2865@gmail.com",
-                  style:
-                      TextStyle(color: Colors.black), // Set text color to black
-                ),
-                currentAccountPicture: const CircleAvatar(
-                  backgroundColor: Colors.black,
-                  child: Text(
-                    'S',
-                    style: TextStyle(fontSize: 40.0, color: Colors.white),
+      drawer: FutureBuilder(
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else {
+            if (snapshot.hasError) {
+              // Handle error if fetching data fails
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final userInformation = snapshot.data;
+              return Drawer(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: yellowGradient,
+                  ),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      UserAccountsDrawerHeader(
+                        decoration: const BoxDecoration(
+                          gradient: yellowGradient,
+                        ),
+                        accountName: Text(
+                          userInformation?.name ?? "", // User's display name
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        accountEmail: Text(
+                          userInformation?.email ?? "", // User's email
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        currentAccountPicture: CircleAvatar(
+                          backgroundColor: Colors.black,
+                          child: Text(
+                            userInformation != null &&
+                                    userInformation.name != null &&
+                                    userInformation.name!.isNotEmpty
+                                ? userInformation.name![0]
+                                    .toUpperCase() // Ensure name is not null or empty
+                                : "", // Display nothing if name is null or empty
+                            style:
+                                // ignore: prefer_const_constructorss
+                                TextStyle(fontSize: 40.0, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      _createDrawerItem(
+                          icon: Icons.home,
+                          text: 'Home',
+                          onTap: () => Navigator.pop(context)),
+                      _createDrawerItem(
+                          icon: Icons.receipt,
+                          text: 'Trip Requests',
+                          onTap: () => Navigator.pop(context)),
+                      _createDrawerItem(
+                        icon: Icons.exit_to_app,
+                        text: 'Logout',
+                        onTap: () {
+                          FirebaseAuth.instance.signOut().then((_) {
+                            Navigator.pop(context); // Close the drawer
+                            Navigator.pushReplacementNamed(
+                                context, '/login'); // Navigate to login screen
+                          }).catchError((error) {
+                            print("Error signing out: $error");
+                            // Handle error if any
+                          });
+                        },
+                      ),
+                      _createDrawerItem(
+                          icon: Icons.security,
+                          text: 'Privacy Policy',
+                          onTap: () => Navigator.pop(context)),
+                      SwitchListTile(
+                        title: const Text('Driver Mode'),
+                        value: false, // this should be a state variable
+                        onChanged: (bool value) {
+                          // Update the state of the app
+                          if (value) {
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) => DriverMainScreen(),
+                            ));
+                          } else {
+                            // Handle turning off Passenger Mode
+                          }
+                        },
+                        secondary: const Icon(Icons.directions_car),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              _createDrawerItem(
-                  icon: Icons.home,
-                  text: 'Home',
-                  onTap: () => Navigator.pop(context)),
-              _createDrawerItem(
-                  icon: Icons.receipt,
-                  text: 'Trip Requests',
-                  onTap: () => Navigator.pop(context)),
-              _createDrawerItem(
-                  icon: Icons.edit,
-                  text: 'Edit Profile',
-                  onTap: () => Navigator.pop(context)),
-              _createDrawerItem(
-                icon: Icons.exit_to_app,
-                text: 'Logout',
-                onTap: () {
-                  FirebaseAuth.instance.signOut().then((_) {
-                    Navigator.pop(context); // Close the drawer
-                    Navigator.pushReplacementNamed(
-                        context, '/login'); // Navigate to login screen
-                  }).catchError((error) {
-                    
-                    print("Error signing out: $error");
-                    // Handle error if any
-                  });
-                },
-              ),
-              _createDrawerItem(
-                  icon: Icons.security,
-                  text: 'Privacy Policy',
-                  onTap: () => Navigator.pop(context)),
-              SwitchListTile(
-                title: const Text('Driver Mode'),
-                value: false, // this should be a state variable
-                onChanged: (bool value) {
-                  // Update the state of the app
-                  if (value) {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const DriverScreen(),
-                    ));
-                  } else {
-                    // Handle turning off Passenger Mode
-                  }
-                },
-                secondary: const Icon(Icons.directions_car),
-              ),
-            ],
-          ),
-        ),
+              );
+            }
+          }
+        },
+        future: FirebaseFirestoreService().getUserInformation(),
       ),
+      
       body: GridView.count(
         crossAxisCount: 2,
         padding: const EdgeInsets.all(16.0),
@@ -232,25 +236,6 @@ class PassengerScreenState extends State<PassengerScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Rating',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.yellow,
-        onTap: _onItemTapped,
-      ),
     );
   }
 
@@ -262,51 +247,6 @@ class PassengerScreenState extends State<PassengerScreen> {
       leading: Icon(icon),
       title: Text(text),
       onTap: onTap,
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Home Screen Content',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
-
-class RatingScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Rating Screen Content',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
-
-class ProfileScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Profile Screen Content',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
     );
   }
 }

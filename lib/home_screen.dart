@@ -1,5 +1,5 @@
-import 'package:demo_project1/views/driver_section/driver_screen.dart';
-import 'package:demo_project1/views/passenger_section/passenger_screen.dart';
+import 'package:demo_project1/views/driver_section/driver_mainscreen.dart';
+import 'package:demo_project1/views/passenger_section/passenger_mainscreen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () {
                         // Handle Passenger button press
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => PassengerScreen(),
+                          builder: (context) => PassengerMainScreen(),
                         ));
                       },
                       child: Container(
@@ -65,7 +65,7 @@ class HomeScreen extends StatelessWidget {
                         // Handle Driver button press
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) =>
-                              DriverScreen(), // Navigate to DriverScreen
+                              DriverMainScreen(), // Navigate to DriverScreen
                         ));
                       },
                       child: Container(

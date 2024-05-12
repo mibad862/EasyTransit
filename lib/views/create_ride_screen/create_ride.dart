@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/views/location/location_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,57 @@ class _CreateTripPageState extends State<CreateTripPage> {
     date = DateTime.now();
   }
 
+  Future<void> submitTripToFirestore({
+    required String startLocation,
+    required String endLocation,
+    required String tripName,
+    required int seatingCapacity,
+    required String tripType,
+    required DateTime date,
+    required TimeOfDay time,
+    required double chargePerKm,
+  }) async {
+    try {
+      // Your Firestore logic to store trip information
+      await FirebaseFirestore.instance.collection('trips').add({
+        'startLocation': startLocation,
+        'endLocation': endLocation,
+        'tripName': tripName,
+        'seatingCapacity': seatingCapacity,
+        'tripType': tripType,
+        'date': date,
+        'time': time,
+        'chargePerKm': chargePerKm,
+      });
+      // Show success message or navigate to another screen
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Trip created successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      // Clear form fields after successful submission
+      setState(() {
+        startLocation = '';
+        endLocation = '';
+        tripName = '';
+        seatingCapacity = 0;
+        tripType = 'One Time';
+        time = TimeOfDay.now();
+        date = DateTime.now();
+        chargePerKm = 5.0;
+      });
+    } catch (error) {
+      // Handle error if submission fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to create trip: $error'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +89,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           children: <Widget>[
             const Text(
               'ROUTE START POINT',
@@ -107,15 +159,15 @@ class _CreateTripPageState extends State<CreateTripPage> {
             const SizedBox(height: 16),
 
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Trip Name',
                 border: OutlineInputBorder(),
               ),
               onSaved: (value) => tripName = value!,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Seating Capacity',
                 border: OutlineInputBorder(),
               ),
@@ -174,7 +226,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                     backgroundColor:
                         tripType == 'One Time' ? Colors.yellow : Colors.grey,
                   ),
-                  child: Text('One Time'),
+                  child: const Text('One Time'),
                 ),
                 ElevatedButton(
                   onPressed: () => _setTripType('Daily'),
@@ -182,18 +234,28 @@ class _CreateTripPageState extends State<CreateTripPage> {
                     backgroundColor:
                         tripType == 'Daily' ? Colors.yellow : Colors.grey,
                   ),
-                  child: Text('Daily'),
+                  child: const Text('Daily'),
                 ),
               ],
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             ElevatedButton(
-              child: Text('Create'),
+              child: const Text('Create'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow, // Background color
                 foregroundColor: Colors.black, // Text Color (Foreground color)
               ),
-              onPressed: _submitForm,
+              onPressed: () {
+                submitTripToFirestore(
+                    startLocation: startLocation,
+                    endLocation: endLocation,
+                    tripName: tripName,
+                    seatingCapacity: seatingCapacity,
+                    tripType: tripType,
+                    date: date,
+                    time: time,
+                    chargePerKm: chargePerKm);
+              },
             ),
           ],
         ),
@@ -250,6 +312,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
       print('Seating Capacity: $seatingCapacity');
       print('Trip Type: $tripType');
       print('Charge per Km: $chargePerKm');
+
       // Implement the rest of the submission logic here
     }
   }

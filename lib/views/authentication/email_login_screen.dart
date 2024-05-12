@@ -1,7 +1,7 @@
 import 'package:demo_project1/common_widgets/common_elevated_button.dart';
 import 'package:demo_project1/common_widgets/common_snackbar.dart';
 import 'package:demo_project1/common_widgets/custom_text_field.dart';
-import 'package:demo_project1/views/home_screen.dart';
+import 'package:demo_project1/home_screen.dart';
 import 'package:demo_project1/views/widgets/custom_email_textfield.dart';
 import 'package:demo_project1/views/widgets/custom_password_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,7 +48,7 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
       );
 
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
       // Handle different authentication errors
       String errorMessage = error.code.toString();
@@ -113,19 +113,19 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text("Forgot Password"),
+                              title: const Text("Forgot Password"),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Enter your email to receive a password reset link.",
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   CustomTextField(
                                     controller: emailController,
                                     labelText: "Email Address",
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   ElevatedButton(
                                     onPressed: () async {
                                       // Handle the password reset logic
@@ -135,26 +135,14 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                                           email: emailController.text,
                                         );
                                         Navigator.pop(context);
-                                        // CustomSnackbar(
-                                        //   context:
-                                        //   title: 'Password Reset Email Sent',
-                                        //   body:
-                                        //       'Please check your email for instructions.',
-                                        //   contentType: ContentType.success,
-                                        // );
+                                        
 
                                         CustomSnackbar.show(
                                             context,
                                             'Password Reset Email Sent',
                                             SnackbarType.success);
                                       } catch (e) {
-                                        print("Error: $e");
-                                        // showCustomMaterialBanner(
-                                        //   context: context,
-                                        //   title: 'Password Reset Failed',
-                                        //   body: 'Failed to send reset email.',
-                                        //   contentType: ContentType.failure,
-                                        // );
+                                        
 
                                         CustomSnackbar.show(
                                             context,
@@ -162,7 +150,7 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                                             SnackbarType.error);
                                       }
                                     },
-                                    child: Text("Reset Password"),
+                                    child: const Text("Reset Password"),
                                   ),
                                 ],
                               ),
@@ -170,7 +158,7 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                           },
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "Forgot Password?",
                         style: TextStyle(
                           fontSize: 14,

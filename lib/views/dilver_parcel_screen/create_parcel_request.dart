@@ -1,6 +1,7 @@
 import 'package:demo_project1/views/location/provider/location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common_widgets/common_appbar.dart';
 import '../../common_widgets/custom_text_field.dart';
@@ -24,6 +25,8 @@ class _ParcelRequestState extends State<ParcelRequest> {
   late String endLocation;
   late TextEditingController tripNameController;
   late TextEditingController seatingCapacityController;
+  late TextEditingController sendersNumberController;
+  late TextEditingController receiversNumberController;
 
   @override
   void initState() {
@@ -38,6 +41,8 @@ class _ParcelRequestState extends State<ParcelRequest> {
     chargePerKm = 5.0;
     tripNameController = TextEditingController();
     seatingCapacityController = TextEditingController();
+    sendersNumberController = TextEditingController();
+    receiversNumberController = TextEditingController();
   }
 
   @override
@@ -122,6 +127,17 @@ class _ParcelRequestState extends State<ParcelRequest> {
                 ),
                 const SizedBox(height: 24),
                 CustomTextField(
+                  labelText: 'Sender\'s Number',
+                  controller: sendersNumberController,
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Recevier\'s Number',
+                  controller: receiversNumberController,
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 24),
+                CustomTextField(
                   labelText: 'Parcel Type',
                   controller: tripNameController,
                 ),
@@ -177,20 +193,21 @@ class _ParcelRequestState extends State<ParcelRequest> {
                     ),
                   ),
                 ),
-                
                 const SizedBox(height: 24),
                 Center(
                   child: SizedBox(
                     width: 200,
                     child: ElevatedButton(
-                      onPressed: _submitForm,
-                      child: const Text('Create'),
+                      onPressed: () {
+                        _submitForm();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.yellow,
                         foregroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(
                             vertical: 16, horizontal: 32),
                       ),
+                      child: const Text('Create'),
                     ),
                   ),
                 ),
@@ -262,21 +279,31 @@ class _ParcelRequestState extends State<ParcelRequest> {
     });
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     final form = _formKey.currentState;
     if (form != null && form.validate()) {
       form.save();
-      FirebaseFirestoreService().storeParcelRecord(
-        context,
-        tripNameController.text,
-        int.tryParse(seatingCapacityController.text) ?? 0,
-        tripType,
-        chargePerKm,
-        date,
-        time,
-        startLocation,
-        endLocation,
-      );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? userName = prefs.getString('userName');
+      if (userName != null && userName.isNotEmpty) {
+        FirebaseFirestoreService().storeParcelRecord(
+          context,
+          tripNameController.text,
+          int.tryParse(seatingCapacityController.text) ?? 0,
+          tripType,
+          chargePerKm,
+          date,
+          time,
+          startLocation,
+          endLocation,
+          userName, // Pass the retrieved user name
+          sendersNumberController.text.toString(),
+          receiversNumberController.text.toString(),
+        );
+      } else {
+        // Handle case where user name is not available in SharedPreferences
+        print('User name not available');
+      }
     }
   }
 }

@@ -44,7 +44,7 @@ class _LocationScreenState extends State<LocationScreen> {
         coordinates.latitude, coordinates.longitude);
     if (placemarks.isNotEmpty) {
       final geo.Placemark placemark = placemarks.first;
-      return '${placemark.street ?? ''}, ${placemark.locality ?? ''}, ${placemark.postalCode ?? ''},${placemark.subAdministrativeArea ?? ''},${placemark.country ?? ''}';
+      return '${placemark.street ?? ''}, ${placemark.locality ?? ''},${placemark.subAdministrativeArea ?? ''},${placemark.country ?? ''}';
     } else {
       return 'Unknown address';
     }
@@ -102,227 +102,225 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Google Map'),
-      ),
-      body: Stack(
-        children: [
-          GoogleMap(
-            onMapCreated: (GoogleMapController controller) {
-              mapController = controller;
-            },
-            onTap: (LatLng tappedPoint) {
-              setState(() {
-                // Set the tapped point as the end route
-                _endMarker = Marker(
-                  markerId: const MarkerId('endPoint'),
-                  position: tappedPoint,
-                  icon: BitmapDescriptor.defaultMarkerWithHue(
-                      BitmapDescriptor.hueRed),
-                  infoWindow: InfoWindow(
-                    title: 'End Point',
-                  ),
-                );
+      body: SafeArea(
+        child: Stack(
+          children: [
+            GoogleMap(
+              onMapCreated: (GoogleMapController controller) {
+                mapController = controller;
+              },
+              onTap: (LatLng tappedPoint) {
+                setState(() {
+                  // Set the tapped point as the end route
+                  _endMarker = Marker(
+                    markerId: const MarkerId('endPoint'),
+                    position: tappedPoint,
+                    icon: BitmapDescriptor.defaultMarkerWithHue(
+                        BitmapDescriptor.hueRed),
+                    infoWindow: const InfoWindow(
+                      title: 'End Point',
+                    ),
+                  );
 
-                // Update the selected location
-                _selectedLocation = tappedPoint;
-              });
-            },
-            initialCameraPosition: CameraPosition(
-              target: _currentLocation ?? const LatLng(0, 0),
-              zoom: 15.0,
-            ),
-            markers: {
-              if (_startMarker != null) _startMarker!,
-              if (_endMarker != null) _endMarker!,
-              Marker(
-                markerId: const MarkerId('currentLocation'),
-                position: _currentLocation,
-                icon: BitmapDescriptor.defaultMarker,
-                infoWindow: InfoWindow(
-                  title: _currentLocationName.isEmpty
-                      ? 'Current Location'
-                      : _currentLocationName,
-                  snippet:
-                      'Latitude: ${_currentLocation.latitude}, Longitude: ${_currentLocation.longitude}',
-                ),
+                  // Update the selected location
+                  _selectedLocation = tappedPoint;
+                });
+              },
+              initialCameraPosition: CameraPosition(
+                target: _currentLocation ?? const LatLng(0, 0),
+                zoom: 15.0,
               ),
-            },
-          ),
-          SizedBox(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: const OutlineInputBorder(),
-                  hintText: 'Search for a location',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () async {
-                      String query = _searchController.text;
-                      if (query.isNotEmpty) {
-                        List<geo.Location> results =
-                            await _searchLocation(query);
-                        setState(() {
-                          _searchResults = results;
-                        });
-                      }
-                    },
+              markers: {
+                if (_startMarker != null) _startMarker!,
+                if (_endMarker != null) _endMarker!,
+                Marker(
+                  markerId: const MarkerId('currentLocation'),
+                  position: _currentLocation,
+                  icon: BitmapDescriptor.defaultMarker,
+                  infoWindow: InfoWindow(
+                    title: _currentLocationName.isEmpty
+                        ? 'Current Location'
+                        : _currentLocationName,
+                    snippet:
+                        'Latitude: ${_currentLocation.latitude}, Longitude: ${_currentLocation.longitude}',
                   ),
                 ),
-              ),
+              },
             ),
-          ),
-          Positioned(
-              bottom: 0,
-              left: 80,
-              child: SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.green)),
-                    onPressed: () {
-                      _saveLocations(context);
-                    },
-                    child: const Text(
-                      "Done",
-                      style: TextStyle(color: Colors.white),
-                    )),
-              )),
-          Positioned(
-            bottom: 60,
-            left: 23,
-            child: Container(
-              width: 300,
-              height: 180,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const SizedBox(
-                      height: 20,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.green,
-                      ),
-                    ),
-                    title: const Text(
-                      "ROUTE START POINT",
-                      style:
-                          TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: FutureBuilder<String>(
-                      future: _getAddressFromCoordinates(_currentLocation),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Text(
-                            'Loading...',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey,
-                            ),
-                          );
-                        } else {
-                          return Text(
-                            snapshot.data ?? 'Tap to set start point',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              color: snapshot.data != null
-                                  ? Colors.black
-                                  : Colors.grey,
-                            ),
-                          );
+            SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: const OutlineInputBorder(),
+                    hintText: 'Search for a location',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () async {
+                        String query = _searchController.text;
+                        if (query.isNotEmpty) {
+                          List<geo.Location> results =
+                              await _searchLocation(query);
+                          setState(() {
+                            _searchResults = results;
+                          });
                         }
                       },
                     ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _startMarker = Marker(
-                            markerId: const MarkerId('startPoint'),
-                            position:
-                                _currentLocation, // Set the current location as start point
-                            icon: BitmapDescriptor.defaultMarkerWithHue(
-                                BitmapDescriptor.hueGreen),
-                            infoWindow: InfoWindow(
-                              title: 'Start Point',
-                            ),
-                          );
-                        });
-                      },
-                      icon: const Icon(Icons.add),
-                    ),
                   ),
-                  const Divider(),
-                  ListTile(
-                    leading: const SizedBox(
-                      height: 20,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.red,
-                      ),
-                    ),
-                    title: const Text(
-                      "ROUTE END POINT",
-                      style:
-                          TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: FutureBuilder<String>(
-                      future: _getAddressFromCoordinates(
-                          _selectedLocation ?? _currentLocation),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Text(
-                            'Loading...',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey,
-                            ),
-                          );
-                        } else {
-                          return Text(
-                            snapshot.data ?? 'Tap to set end point',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              color: snapshot.data != null
-                                  ? Colors.black
-                                  : Colors.grey,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _endMarker = Marker(
-                            markerId: const MarkerId('endPoint'),
-                            position:
-                                _currentLocation, // Set the current location as end point
-                            icon: BitmapDescriptor.defaultMarkerWithHue(
-                                BitmapDescriptor.hueRed),
-                            infoWindow: InfoWindow(
-                              title: 'End Point',
-                            ),
-                          );
-                        });
-                      },
-                      icon: const Icon(Icons.add),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          )
-        ],
+            Positioned(
+                bottom: 0,
+                left: 80,
+                child: SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                      style: const ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.green)),
+                      onPressed: () {
+                        _saveLocations(context);
+                      },
+                      child: const Text(
+                        "Done",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                )),
+            Positioned(
+              bottom: 60,
+              left: 23,
+              child: Container(
+                width: 300,
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const SizedBox(
+                        height: 20,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.green,
+                        ),
+                      ),
+                      title: const Text(
+                        "ROUTE START POINT",
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: FutureBuilder<String>(
+                        future: _getAddressFromCoordinates(_currentLocation),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Text(
+                              'Loading...',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.grey,
+                              ),
+                            );
+                          } else {
+                            return Text(
+                              snapshot.data ?? 'Tap to set start point',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: snapshot.data != null
+                                    ? Colors.black
+                                    : Colors.grey,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _startMarker = Marker(
+                              markerId: const MarkerId('startPoint'),
+                              position:
+                                  _currentLocation, // Set the current location as start point
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueGreen),
+                              infoWindow: const InfoWindow(
+                                title: 'Start Point',
+                              ),
+                            );
+                          });
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                    ),
+                    const Divider(),
+                    ListTile(
+                      leading: const SizedBox(
+                        height: 20,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red,
+                        ),
+                      ),
+                      title: const Text(
+                        "ROUTE END POINT",
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: FutureBuilder<String>(
+                        future: _getAddressFromCoordinates(
+                            _selectedLocation ?? _currentLocation),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Text(
+                              'Loading...',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.grey,
+                              ),
+                            );
+                          } else {
+                            return Text(
+                              snapshot.data ?? 'Tap to set end point',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: snapshot.data != null
+                                    ? Colors.black
+                                    : Colors.grey,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _endMarker = Marker(
+                              markerId: const MarkerId('endPoint'),
+                              position:
+                                  _currentLocation, // Set the current location as end point
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueRed),
+                              infoWindow: const InfoWindow(
+                                title: 'End Point',
+                              ),
+                            );
+                          });
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -13,11 +13,15 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
 
+  late DateTime date = DateTime.now(); // Initialize date variable
+
   @override
   void dispose() {
     _nameController.dispose();
     _locationController.dispose();
     _timeController.dispose();
+    date = DateTime.now();
+
     super.dispose();
   }
 
@@ -44,7 +48,8 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
         context,
         _nameController.text.toString(),
         _locationController.text.toString(),
-        _timeController.text.toString());
+        _timeController.text.toString(),
+        date);
 
     _nameController.text = "";
     _locationController.text = "";
@@ -77,18 +82,30 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: _nameController,
+              controller: _locationController,
               decoration: const InputDecoration(
                 labelText: 'Location',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: _locationController,
-              decoration: const InputDecoration(
-                labelText: 'Date',
-                border: OutlineInputBorder(),
+            InkWell(
+              onTap: _selectDate,
+              child: InputDecorator(
+                decoration: const InputDecoration(
+                  labelText: 'Date',
+                  border: OutlineInputBorder(),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '${date.year}-${date.month}-${date.day}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const Icon(Icons.calendar_today),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -124,5 +141,19 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 10),
+    );
+    if (pickedDate != null && pickedDate != date) {
+      setState(() {
+        date = pickedDate;
+      });
+    }
   }
 }
