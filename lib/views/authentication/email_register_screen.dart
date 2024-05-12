@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/common_elevated_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common_widgets/common_bottom_headline.dart';
 import '../../utils/field_validator.dart';
-import '../otp_login_screen.dart';
+import '../verify_email/verify_email.dart';
 import '../widgets/custom_email_textfield.dart';
 import '../widgets/custom_password_textfield.dart';
 
@@ -29,7 +29,7 @@ class _EmailRegisterScreenState extends State<EmailRegisterScreen> {
   bool isSubmit = false;
 
   final _formKey = GlobalKey<FormState>();
-  CollectionReference users = FirebaseFirestore.instance.collection('user');
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Future<void> _submit() async {
     setState(() {
@@ -57,9 +57,16 @@ class _EmailRegisterScreenState extends State<EmailRegisterScreen> {
         'email': emailController.text.toString(),
       });
 
-      // Navigate to the login screen upon successful account creation
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => OtpLogin()));
+      // Save the user's full name locally using SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('fullName', nameController.text.toString());
+
+      // Send email verification
+      await userCredential.user!.sendEmailVerification();
+
+      // Navigate to the EmailVerificationScreen
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => EmailVerificationScreen()));
     } on FirebaseAuthException catch (error) {
       String errorMessage = error.code.toString();
 

@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:demo_project1/common_widgets/common_snackbar.dart';
+import 'package:demo_project1/views/authentication/email_login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
-  const EmailVerificationScreen({Key? key}) : super(key: key);
+  const EmailVerificationScreen({super.key});
 
   @override
   State<EmailVerificationScreen> createState() =>
@@ -34,9 +35,13 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
     if (isEmailVerified) {
       // TODO: implement your code after email verification
-      CustomSnackbar(
-        
-      );
+      CustomSnackbar.show(
+          context, "Successfully Verified", SnackbarType.success);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EmailLoginScreen(),
+          ));
       //Navigator.pushNamed(context, AppRoutes.edit_profile);
       timer?.cancel();
     }

@@ -44,22 +44,16 @@ dependencies:
   location:
   permission_handler:
   geocoding:
-  map_launcher:
-  google_api_headers:
   geolocator:
-  flutter_easyloading:
   pinput:
   firebase_auth:
-  place_picker:
-  google_maps_webservice:
-  flutter_google_places_hoc081098:
   provider:
   path_provider:
   firebase_storage:
   cloud_firestore:
-  google_fonts:
   shared_preferences:
-  get:
+  image_picker:
+
 
 
   
@@ -101,12 +95,12 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans-Regular.ttf
+        - asset: assets/fonts/OpenSans-Semibold.ttf
+          style: italic
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
