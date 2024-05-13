@@ -53,6 +53,7 @@ dependencies:
   cloud_firestore:
   shared_preferences:
   image_picker:
+  flutter_polyline_points:
 
 
 

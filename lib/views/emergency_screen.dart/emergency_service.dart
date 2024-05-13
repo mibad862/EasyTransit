@@ -1,5 +1,6 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/services/firebase_firestore_services.dart';
+import 'package:demo_project1/views/location/maps_location.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -83,6 +84,13 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
             const SizedBox(height: 20),
             TextField(
               controller: _locationController,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GoogleMapPage(),
+                    ));
+              },
               decoration: const InputDecoration(
                 labelText: 'Location',
                 border: OutlineInputBorder(),

@@ -1,14 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+const String googleMapsApiKey = "AIzaSyD7jU1Kd0XRUlbP8-6bxEyf8tREukD-qjM";
 
-class Constants {
-  final _firestore = FirebaseFirestore.instance;
-  final _auth = FirebaseAuth.instance;
-
-  String? userId;
-
-  Constants() {
-    // Initialize userId in the constructor
-    userId = _auth.currentUser?.uid;
-  }
-}
+//"AIzaSyC1f6cHoNQCGkerIJ7vzCLZgV9QE1Zr6Xg";
