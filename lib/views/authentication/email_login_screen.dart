@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/common_elevated_button.dart';
-import 'package:demo_project1/common_widgets/common_snackbar.dart';
+import 'package:demo_project1/common_widgets/custom_snackbar.dart';
 import 'package:demo_project1/common_widgets/custom_text_field.dart';
 import 'package:demo_project1/home_screen.dart';
 import 'package:demo_project1/views/widgets/custom_email_textfield.dart';
 import 'package:demo_project1/views/widgets/custom_password_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common_widgets/common_bottom_headline.dart';
 import '../../utils/field_validator.dart';
@@ -25,6 +27,40 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
   bool isVisible = false;
   bool isSubmit = false;
   final _formKey = GlobalKey<FormState>();
+
+  Future<void> storeUserProfile(User user, String userName, String phoneNumber,
+      String vehicleName, String vehicleNo) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('driverDetails')
+          .doc(user.uid)
+          .set({
+        'name': userName,
+        'phoneNumber': phoneNumber,
+        'vehicleName': vehicleName,
+        'vehicleNo': vehicleNo,
+      });
+    } catch (error) {
+      print('Error storing user profile: $error');
+      throw error;
+    }
+  }
+
+// Function to retrieve profile information from Firestore
+  Future<Map<String, dynamic>> getUserProfile(User user) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('driverDetails')
+          .doc(user.uid)
+          .get();
+      return snapshot.data() ??
+          {}; // Return empty map if document doesn't exist
+    } catch (error) {
+      print('Error retrieving user profile: $error');
+      throw error;
+    }
+  }
 
   Future<void> _submit(BuildContext context) async {
     setState(() {
@@ -62,6 +98,19 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
         isSubmit = false; // Reset to false after authentication attempt
       });
     }
+  }
+
+  Future<void> printUserProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userName = prefs.getString('username');
+    String? phoneNumber = prefs.getString('phoneNumber');
+    String? vehicleName = prefs.getString('vehicleName');
+    String? vehicleNo = prefs.getString('vehicleNo');
+
+    print('User Name: $userName');
+    print('Phone Number: $phoneNumber');
+    print('Vehicle Name: $vehicleName');
+    print('Vehicle No: $vehicleNo');
   }
 
   @override
@@ -135,15 +184,12 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                                           email: emailController.text,
                                         );
                                         Navigator.pop(context);
-                                        
 
                                         CustomSnackbar.show(
                                             context,
                                             'Password Reset Email Sent',
                                             SnackbarType.success);
                                       } catch (e) {
-                                        
-
                                         CustomSnackbar.show(
                                             context,
                                             'Failed to send reset email',

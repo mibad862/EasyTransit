@@ -3,11 +3,12 @@ import 'package:demo_project1/services/firebase_firestore_services.dart';
 import 'package:demo_project1/views/bus_schedule/bus_schedule.dart';
 import 'package:demo_project1/views/dilver_parcel_screen/create_parcel_request.dart';
 import 'package:demo_project1/views/driver_section/driver_mainscreen.dart';
-import 'package:demo_project1/views/ride_view_screen.dart';
+import 'package:demo_project1/views/ride_view_screen/ride_view_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../emergency_screen.dart/emergency_service.dart';
+import '../privacy_policy/privacy_policy_screen.dart';
 
 class PassengerScreen extends StatefulWidget {
   const PassengerScreen({super.key});
@@ -114,10 +115,6 @@ class PassengerScreenState extends State<PassengerScreen> {
                           text: 'Home',
                           onTap: () => Navigator.pop(context)),
                       _createDrawerItem(
-                          icon: Icons.receipt,
-                          text: 'Trip Requests',
-                          onTap: () => Navigator.pop(context)),
-                      _createDrawerItem(
                         icon: Icons.exit_to_app,
                         text: 'Logout',
                         onTap: () {
@@ -134,7 +131,10 @@ class PassengerScreenState extends State<PassengerScreen> {
                       _createDrawerItem(
                           icon: Icons.security,
                           text: 'Privacy Policy',
-                          onTap: () => Navigator.pop(context)),
+                          onTap: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PrivacyPolicyScreen(),
+                              ))),
                       SwitchListTile(
                         title: const Text('Driver Mode'),
                         value: false, // this should be a state variable
@@ -160,7 +160,6 @@ class PassengerScreenState extends State<PassengerScreen> {
         },
         future: FirebaseFirestoreService().getUserInformation(),
       ),
-      
       body: GridView.count(
         crossAxisCount: 2,
         padding: const EdgeInsets.all(16.0),

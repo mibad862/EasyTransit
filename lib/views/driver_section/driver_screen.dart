@@ -2,6 +2,8 @@ import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/views/bus_schedule/bus_schedule.dart';
 import 'package:demo_project1/views/emergency_screen.dart/emergency_service.dart';
 import 'package:demo_project1/views/passenger_section/passenger_screen.dart';
+import 'package:demo_project1/views/privacy_policy/privacy_policy_screen.dart';
+import 'package:demo_project1/views/trip_requests/trip_request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +68,8 @@ class DriverScreen extends StatelessWidget {
                                 : "", // Display nothing if name is null or empty
                             style:
                                 // ignore: prefer_const_constructorss
-                                TextStyle(fontSize: 40.0, color: Colors.white),
+                                const TextStyle(
+                                    fontSize: 40.0, color: Colors.white),
                           ),
                         ),
                       ),
@@ -77,7 +80,11 @@ class DriverScreen extends StatelessWidget {
                       _createDrawerItem(
                           icon: Icons.receipt,
                           text: 'Trip Requests',
-                          onTap: () => Navigator.pop(context)),
+                          onTap: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const TripRequestsScreen(),
+                              ))),
                       _createDrawerItem(
                         icon: Icons.exit_to_app,
                         text: 'Logout',
@@ -95,7 +102,10 @@ class DriverScreen extends StatelessWidget {
                       _createDrawerItem(
                           icon: Icons.security,
                           text: 'Privacy Policy',
-                          onTap: () => Navigator.pop(context)),
+                          onTap: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PrivacyPolicyScreen(),
+                              ))),
                       SwitchListTile(
                         title: const Text('Driver Mode'),
                         value: false, // this should be a state variable
@@ -104,7 +114,7 @@ class DriverScreen extends StatelessWidget {
                           if (value) {
                             Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
-                              builder: (context) => PassengerScreen(),
+                              builder: (context) => const PassengerScreen(),
                             ));
                           } else {
                             // Handle turning off Passenger Mode

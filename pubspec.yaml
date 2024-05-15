@@ -54,6 +54,8 @@ dependencies:
   shared_preferences:
   image_picker:
   flutter_polyline_points:
+  intl:
+  flutter_rating_bar:
 
 
 

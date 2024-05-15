@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demo_project1/common_widgets/common_snackbar.dart';
+import 'package:demo_project1/common_widgets/custom_snackbar.dart';
 import 'package:demo_project1/views/passenger_section/model/user_info_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +39,45 @@ class FirebaseFirestoreService {
         'seatingCapacity': seatingCapacity,
         'tripType': tripType,
         'chargePerKm': chargePerKm,
+        'date': date,
+        'time': formattedTime, // Store formatted time
+        'startLocation': startLocation,
+        'endLocation': endLocation,
+      });
+      print('Parcel record added successfully');
+      CustomSnackbar.show(
+          context, 'Parcel record added successfully', SnackbarType.success);
+    } catch (e) {
+      print('Error adding parcel record: $e');
+      CustomSnackbar.show(
+          context, 'Error adding parcel record', SnackbarType.error);
+    }
+  }
+
+  Future<void> storeTripRecord(
+    BuildContext context,
+    String tripName,
+    int seatingCapacity,
+    String tripType,
+    double chargePerKm,
+    DateTime date,
+    TimeOfDay time,
+    String startLocation,
+    String endLocation,
+    String userName,
+  ) async {
+    try {
+      // Convert TimeOfDay to String representation
+      String formattedTime = '${time.hour}:${time.minute}';
+      String? userId = _auth.currentUser?.uid;
+
+      CollectionReference userCollection = _firestore.collection('TripRecords');
+
+      userCollection.add({
+        'userName': userName,
+        'tripName': tripName,
+        'seatingCapacity': seatingCapacity,
+        'tripType': tripType,
         'date': date,
         'time': formattedTime, // Store formatted time
         'startLocation': startLocation,
@@ -144,4 +183,68 @@ class FirebaseFirestoreService {
       return null;
     }
   }
+
+  Future<void> submitTripToFirestore({
+    required BuildContext context,
+    required String startLocation,
+    required String endLocation,
+    required String tripName,
+    required String seatingCapacity,
+    required String tripType,
+    required DateTime date,
+    required TimeOfDay time,
+    required double chargePerKm,
+    required String contactNo,
+    required String vehicleNo,
+  }) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? userName = prefs.getString('userName');
+      DateTime adjustedDate = DateTime(date.year, date.month, date.day);
+
+      // Your Firestore logic to store trip information
+      await FirebaseFirestore.instance.collection('trips').add({
+        'UserName': userName,
+        'startLocation': startLocation,
+        'endLocation': endLocation,
+        'tripName': tripName,
+        'seatingCapacity': seatingCapacity,
+        'tripType': tripType,
+        'date': adjustedDate,
+        'time': timeToString(time),
+        'chargePerKm': chargePerKm,
+        'contact no' : contactNo,
+        'vehicle no' :vehicleNo
+      });
+      // Show success message or navigate to another screen
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Trip created successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.pop(context);
+      // Clear form fields after successful submission
+    } catch (error) {
+      // Handle error if submission fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to create trip: $error'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      print(error.toString());
+    }
+  }
+
+  String timeToString(TimeOfDay time) {
+    final now = DateTime.now();
+    final DateTime datetime =
+        DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    return datetime.toIso8601String().substring(11, 16); // HH:mm format
+  }
+
+
+  
 }

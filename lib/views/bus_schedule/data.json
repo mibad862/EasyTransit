@@ -1,0 +1,149 @@
+{
+    "bus_timings": [
+      {
+        "route": "Karachi to Rawalpindi",
+        "departure_time": "10:00:00 AM",
+        "bus_type": "Luxury",
+        "travel_time": "18 Hours"
+      },
+      {
+        "route": "Karachi to Rawalpindi",
+        "departure_time": "12:00:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "18 Hours"
+      },
+      {
+        "route": "Karachi to Rawalpindi",
+        "departure_time": "4:00:00 PM",
+        "bus_type": "Sleeper Bus",
+        "travel_time": "18 Hours"
+      },
+      {
+        "route": "Karachi to Rawalpindi",
+        "departure_time": "10:00:00 PM",
+        "bus_type": "Sleeper Bus",
+        "travel_time": "18 Hours"
+      },
+      {
+        "route": "Karachi to Rawalpindi",
+        "departure_time": "11:15:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "18 Hours"
+      },
+      {
+        "route": "Karachi to Lahore",
+        "departure_time": "9:00:00 AM",
+        "bus_type": "Luxury",
+        "travel_time": "16 Hours"
+      },
+      {
+        "route": "Karachi to Lahore",
+        "departure_time": "2:00:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "16 Hours"
+      },
+      {
+        "route": "Karachi to Lahore",
+        "departure_time": "5:00:00 PM",
+        "bus_type": "Sleeper Bus",
+        "travel_time": "16 Hours"
+      },
+      {
+        "route": "Karachi to Lahore",
+        "departure_time": "8:00:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "16 Hours"
+      },
+      {
+        "route": "Karachi to Lahore",
+        "departure_time": "9:00:00 PM",
+        "bus_type": "Sleeper Bus",
+        "travel_time": "16 Hours"
+      },
+      {
+        "route": "Karachi to Lahore",
+        "departure_time": "10:00:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "16 Hours"
+      },
+      {
+        "route": "Karachi to Lahore",
+        "departure_time": "11:00:00 PM",
+        "bus_type": "Sleeper Bus",
+        "travel_time": "16 Hours"
+      },
+      {
+        "route": "Karachi to Multan",
+        "departure_time": "8:00:00 AM",
+        "bus_type": "Luxury",
+        "travel_time": "12 Hours"
+      },
+      {
+        "route": "Karachi to Multan",
+        "departure_time": "9:00:00 AM",
+        "bus_type": "Luxury",
+        "travel_time": "12 Hours"
+      },
+      {
+        "route": "Karachi to Multan",
+        "departure_time": "10:00:00 AM",
+        "bus_type": "Luxury",
+        "travel_time": "12 Hours"
+      },
+      {
+        "route": "Karachi to Multan",
+        "departure_time": "12:00:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "12 Hours"
+      },
+      {
+        "route": "Karachi to Multan",
+        "departure_time": "2:00:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "12 Hours"
+      },
+      {
+        "route": "Karachi to Multan",
+        "departure_time": "6:00:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "12 Hours"
+      },
+      {
+        "route": "Karachi to Multan",
+        "departure_time": "10:00:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "12 Hours"
+      },
+      {
+        "route": "Karachi to Multan",
+        "departure_time": "11:15:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "12 Hours"
+      },
+      {
+        "route": "Karachi to Sargodha",
+        "departure_time": "6:00:00 PM",
+        "bus_type": "Luxury",
+        "travel_time": "18 Hours"
+      },
+      {
+        "route": "Karachi to Abbottabad",
+        "departure_time": "10:00:00 AM",
+        "bus_type": "Luxury",
+        "travel_time": "21 Hours"
+      },
+      {
+        "route": "Karachi to Peshawar",
+        "departure_time": "8:00:00 AM",
+        "bus_type": "Luxury",
+        "travel_time": "19 Hours"
+      },
+      {
+        "route": "Karachi to Abbotabad",
+        "departure_time": "10:00:00 AM",
+        "bus_type": "Luxury",
+        "travel_time": "21 Hours"
+      }
+    ]
+  }
+  

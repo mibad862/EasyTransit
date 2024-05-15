@@ -71,8 +71,23 @@ class _LocationScreenState extends State<LocationScreen> {
           title: 'Pickup Location',
         ),
       );
+      _updateAddresses();
+
       _updatePath();
     });
+  }
+
+  Future<void> _updateAddresses() async {
+    if (_pickupMarker != null && _dropoffMarker != null) {
+      final pickupAddress =
+          await _getAddressFromCoordinates(_pickupMarker!.position);
+      final dropoffAddress =
+          await _getAddressFromCoordinates(_dropoffMarker!.position);
+      final locationProvider =
+          Provider.of<LocationProvider>(context, listen: false);
+      locationProvider.setStartAddress(pickupAddress);
+      locationProvider.setEndAddress(dropoffAddress);
+    }
   }
 
   void _selectDropoffLocation(LatLng location) {
@@ -85,6 +100,9 @@ class _LocationScreenState extends State<LocationScreen> {
           title: 'Drop-off Location',
         ),
       );
+
+      _updateAddresses();
+
       _updatePath();
     });
   }
@@ -207,6 +225,7 @@ class _LocationScreenState extends State<LocationScreen> {
               },
               onTap: (LatLng tappedPoint) {
                 showModalBottomSheet(
+                  backgroundColor: Colors.amberAccent.withOpacity(0.6),
                   context: context,
                   builder: (BuildContext context) {
                     return Container(
@@ -215,18 +234,30 @@ class _LocationScreenState extends State<LocationScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                    Colors.greenAccent)),
                             onPressed: () {
                               _selectPickupLocation(tappedPoint);
                               Navigator.pop(context);
                             },
-                            child: const Text('Pickup Location'),
+                            child: const Text(
+                              'Pickup Location',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll(Colors.redAccent)),
                             onPressed: () {
                               _selectDropoffLocation(tappedPoint);
                               Navigator.pop(context);
                             },
-                            child: const Text('Drop-off Location'),
+                            child: const Text(
+                              'Drop-off Location',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ],
                       ),
@@ -270,6 +301,9 @@ class _LocationScreenState extends State<LocationScreen> {
               left: 10.0,
               right: 10.0,
               child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll(Colors.amberAccent)),
                 onPressed: () async {
                   // Access the LocationProvider and set start and end addresses
                   final locationProvider =
@@ -295,7 +329,10 @@ class _LocationScreenState extends State<LocationScreen> {
                     );
                   }
                 },
-                child: const Text('Save Location'),
+                child: const Text(
+                  'Save Location',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
             if (_placePredictions.isNotEmpty)

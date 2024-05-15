@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:demo_project1/common_widgets/common_snackbar.dart';
+import 'package:demo_project1/common_widgets/custom_snackbar.dart';
 import 'package:demo_project1/views/authentication/email_login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
