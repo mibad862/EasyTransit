@@ -77,17 +77,20 @@ class _ParcelRequestState extends State<ParcelRequest> {
                       children: [
                         const Icon(Icons.location_on, color: Colors.green),
                         const SizedBox(width: 8),
-                        FittedBox(
-                          fit: BoxFit.none,
-                          child: Text(
-                            startLocation.isNotEmpty
-                                ? startLocation
-                                : 'SELECT ROUTE START POINT',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: startLocation.isNotEmpty
-                                    ? Colors.black
-                                    : Colors.grey),
+                        Expanded(
+                          flex: 1,
+                          child: FittedBox(
+                            fit: BoxFit.none,
+                            child: Text(
+                              startLocation.isNotEmpty
+                                  ? startLocation
+                                  : 'SELECT ROUTE START POINT',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: startLocation.isNotEmpty
+                                      ? Colors.black
+                                      : Colors.grey),
+                            ),
                           ),
                         ),
                       ],
@@ -112,14 +115,17 @@ class _ParcelRequestState extends State<ParcelRequest> {
                       children: [
                         const Icon(Icons.location_on, color: Colors.red),
                         const SizedBox(width: 8),
-                        Text(
-                          endLocation.isNotEmpty
-                              ? endLocation
-                              : 'SELECT ROUTE END POINT',
-                          style: TextStyle(
-                              color: endLocation.isNotEmpty
-                                  ? Colors.black
-                                  : Colors.grey),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            endLocation.isNotEmpty
+                                ? endLocation
+                                : 'SELECT ROUTE END POINT',
+                            style: TextStyle(
+                                color: endLocation.isNotEmpty
+                                    ? Colors.black
+                                    : Colors.grey),
+                          ),
                         ),
                       ],
                     ),

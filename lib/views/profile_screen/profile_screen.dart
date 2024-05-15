@@ -8,7 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../common_widgets/common_snackbar.dart';
+import '../../common_widgets/custom_snackbar.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -24,12 +24,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String _avatarImagePath = ''; // Initialize _avatarImagePath here
   User? user = FirebaseAuth.instance.currentUser;
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
 
     // Retrieve user profile data from Firestore
-
     getDiverdata();
   }
 
@@ -69,17 +70,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       try {
-        // Upload image to Firebase Storage
-        final storageRef = FirebaseStorage.instance
-            .ref()
-            .child('profile_images')
-            .child('${user.uid}.jpg');
-        final uploadTask = storageRef.putFile(File(_avatarImagePath));
-        final TaskSnapshot uploadSnapshot =
-            await uploadTask.whenComplete(() {});
+        String? imageUrl;
+        if (_avatarImagePath.isNotEmpty) {
+          // Upload image to Firebase Storage
+          final storageRef = FirebaseStorage.instance
+              .ref()
+              .child('profile_images')
+              .child('${user.uid}.jpg');
+          final uploadTask = storageRef.putFile(File(_avatarImagePath));
+          final TaskSnapshot uploadSnapshot =
+              await uploadTask.whenComplete(() {});
 
-        // Get download URL of the uploaded image
-        final imageUrl = await uploadSnapshot.ref.getDownloadURL();
+          // Get download URL of the uploaded image
+          imageUrl = await uploadSnapshot.ref.getDownloadURL();
+        }
 
         // Store profile information along with image URL in Firestore
         await FirebaseFirestore.instance
@@ -90,7 +94,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           'phoneNumber': _phonenoController.text,
           'vehicleName': _vehicleNameController.text,
           'vehicleNo': _vehiclenoController.text,
-          'imageUrl': imageUrl, // Store image URL in Firestore
+          if (imageUrl != null)
+            'imageUrl': imageUrl, // Store image URL if available
           // Add other fields as needed
         });
 
@@ -112,81 +117,107 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: const CommonAppBar(title: "My Profile", showicon: true),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 0.02 * height,
-            ),
-            Center(
-              child: GestureDetector(
-                onTap: _pickImage,
-                child: SizedBox(
-                  height: 0.2 * height,
-                  child: CircleAvatar(
-                    backgroundImage: _avatarImagePath.isNotEmpty
-                        ? Image.file(File(_avatarImagePath)).image
-                        : const AssetImage("assets/images/Avatar.png"),
-                    radius: 60,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 0.02 * height,
+              ),
+              Center(
+                child: GestureDetector(
+                  onTap: _pickImage,
+                  child: SizedBox(
+                    height: 0.2 * height,
+                    child: CircleAvatar(
+                      backgroundImage: _avatarImagePath.isNotEmpty
+                          ? Image.file(File(_avatarImagePath)).image
+                          : const AssetImage("assets/images/Avatar.png"),
+                      radius: 60,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 0.03 * width),
-              child: Column(
-                children: [
-                  CustomTextField(
-                    labelText: "Name",
-                    controller: _nameController,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CustomTextField(
-                    labelText: "Phone no",
-                    controller: _phonenoController,
-                    keyboardType: TextInputType.phone,
-                    validator: (value) {
-                      if (value != null && value.length != 11) {
-                        return 'Phone number must be 11 digits';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CustomTextField(
-                    labelText: "Vehicle Name",
-                    controller: _vehicleNameController,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CustomTextField(
-                    labelText: "Vehicle No",
-                    controller: _vehiclenoController,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                    width: 0.7 * width,
-                    child: ElevatedButton(
-                      style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.amberAccent),
-                      ),
-                      onPressed: () {
-                        _saveProfile(context);
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 0.03 * width),
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      labelText: "Name",
+                      controller: _nameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
                       },
-                      child: const Text("Save"),
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CustomTextField(
+                      labelText: "Phone no",
+                      controller: _phonenoController,
+                      keyboardType: TextInputType.phone,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your phone number';
+                        }
+                        if (value.length != 11) {
+                          return 'Phone number must be 11 digits';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CustomTextField(
+                      labelText: "Vehicle Name",
+                      controller: _vehicleNameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your Vehicle Name';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CustomTextField(
+                      labelText: "Vehicle No",
+                      controller: _vehiclenoController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Vehicle no';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: 0.7 * width,
+                      child: ElevatedButton(
+                        style: const ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.amberAccent),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _saveProfile(context);
+                          }
+                        },
+                        child: const Text("Save"),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
