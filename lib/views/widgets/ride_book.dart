@@ -12,8 +12,8 @@ class BookingPage extends StatefulWidget {
   final DateTime date;
   final DateTime time;
   final String seatCapacity;
-  final String contactNo;
-  final String vehicleNo;
+  // final String contactNo;
+  // final String vehicleNo;
   final String documentId;
 
   const BookingPage({
@@ -27,8 +27,8 @@ class BookingPage extends StatefulWidget {
     required this.date,
     required this.time,
     required this.seatCapacity,
-    required this.contactNo,
-    required this.vehicleNo,
+    // required this.contactNo,
+    // required this.vehicleNo,
   }) : super(key: key);
 
   @override
@@ -117,11 +117,11 @@ class _BookingPageState extends State<BookingPage> {
                 const Divider(),
                 ListTile(
                   title: const Text('Contact No'),
-                  trailing: Text(widget.contactNo),
+                  // trailing: Text(widget.contactNo),
                 ),
                 ListTile(
                   title: const Text('Vehicle No'),
-                  trailing: Text(widget.vehicleNo),
+                  // trailing: Text(widget.vehicleNo),
                 ),
                 const Divider(),
                 CounterWidget(

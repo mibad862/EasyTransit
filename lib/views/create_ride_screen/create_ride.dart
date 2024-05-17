@@ -235,6 +235,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
     try {
       // Get the current user
       User? user = FirebaseAuth.instance.currentUser;
+      print(user!.uid);
 
       if (user != null) {
         // Get a reference to the document

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class RideViewScreen extends StatelessWidget {
+  const RideViewScreen({super.key});
+
   DateTime _parseTimeString(String timeString) {
     // Split the time string into hours and minutes
     List<String> parts = timeString.split(":");
@@ -37,6 +39,7 @@ class RideViewScreen extends StatelessWidget {
             itemCount: trips.length,
             itemBuilder: (BuildContext context, int index) {
               final trip = trips[index];
+              // print('Trip ID: ${trip.id}');
               return rideOption(
                 context,
                 documentId: trip.id,
@@ -47,8 +50,8 @@ class RideViewScreen extends StatelessWidget {
                 time: _parseTimeString(trip["time"]),
                 date: (trip["date"] as Timestamp).toDate(),
                 seatCapacity: trip['seatingCapacity'].toString(),
-                contactNo: trip['contact no'].toString(),
-                vehicleNo: trip['vehicle no'].toString(),
+                // contactNo: trip['contact no'].toString(),
+                // vehicleNo: trip['vehicle no'].toString(),
               );
             },
           );
@@ -69,8 +72,8 @@ Widget rideOption(
   required DateTime date,
   required DateTime time,
   required String seatCapacity,
-  required contactNo,
-  required vehicleNo,
+  // required contactNo,
+  // required vehicleNo,
 }) {
   return Card(
     elevation: 4,
@@ -99,8 +102,8 @@ Widget rideOption(
                     date: date,
                     time: time,
                     seatCapacity: seatCapacity,
-                    contactNo: contactNo,
-                    vehicleNo: vehicleNo,
+                    // contactNo: contactNo,
+                    // vehicleNo: vehicleNo,
                   ), // Correct usage of constructor
                 ),
               );
@@ -161,7 +164,7 @@ Widget rideOption(
                 children: <Widget>[
                   const Icon(Icons.alarm, color: Colors.amberAccent),
                   const SizedBox(width: 8),
-                  const Text('Trip Time:',
+                  const Text('Trip Timee:',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(width: 8),
                   Expanded(child: Text(DateFormat.jm().format(time))),
