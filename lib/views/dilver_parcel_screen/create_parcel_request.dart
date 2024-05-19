@@ -1,4 +1,3 @@
-import 'package:demo_project1/views/location/provider/location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +6,7 @@ import '../../common_widgets/common_appbar.dart';
 import '../../common_widgets/custom_text_field.dart';
 import '../../services/firebase_firestore_services.dart';
 import '../location/location_screen.dart';
+import '../location/provider/location_provider.dart';
 
 class ParcelRequest extends StatefulWidget {
   @override
@@ -15,41 +15,33 @@ class ParcelRequest extends StatefulWidget {
 
 class _ParcelRequestState extends State<ParcelRequest> {
   final _formKey = GlobalKey<FormState>();
-  late String tripName;
-  late int seatingCapacity;
-  late String tripType;
-  late TimeOfDay time;
-  late DateTime date;
-  late double chargePerKm;
-  late String startLocation;
-  late String endLocation;
   late TextEditingController tripNameController;
   late TextEditingController seatingCapacityController;
   late TextEditingController sendersNumberController;
   late TextEditingController receiversNumberController;
+  late TextEditingController fareController;
+  late TimeOfDay time;
+  late DateTime date;
+  String startLocation = '';
+  String endLocation = '';
 
   @override
   void initState() {
     super.initState();
     time = TimeOfDay.now();
     date = DateTime.now();
-    tripType = 'One Time';
-    startLocation = '';
-    endLocation = '';
-    tripName = '';
-    seatingCapacity = 0;
-    chargePerKm = 5.0;
     tripNameController = TextEditingController();
     seatingCapacityController = TextEditingController();
     sendersNumberController = TextEditingController();
     receiversNumberController = TextEditingController();
+    fareController = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CommonAppBar(
-        title: 'Dilver Parcel',
+        title: 'Deliver Parcel',
         showicon: true,
       ),
       body: SingleChildScrollView(
@@ -78,19 +70,14 @@ class _ParcelRequestState extends State<ParcelRequest> {
                         const Icon(Icons.location_on, color: Colors.green),
                         const SizedBox(width: 8),
                         Expanded(
-                          flex: 1,
-                          child: FittedBox(
-                            fit: BoxFit.none,
-                            child: Text(
-                              startLocation.isNotEmpty
-                                  ? startLocation
-                                  : 'SELECT ROUTE START POINT',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: startLocation.isNotEmpty
-                                      ? Colors.black
-                                      : Colors.grey),
-                            ),
+                          child: Text(
+                            startLocation.isNotEmpty
+                                ? startLocation
+                                : 'SELECT ROUTE START POINT',
+                            style: TextStyle(
+                                color: startLocation.isNotEmpty
+                                    ? Colors.black
+                                    : Colors.grey),
                           ),
                         ),
                       ],
@@ -116,7 +103,6 @@ class _ParcelRequestState extends State<ParcelRequest> {
                         const Icon(Icons.location_on, color: Colors.red),
                         const SizedBox(width: 8),
                         Expanded(
-                          flex: 1,
                           child: Text(
                             endLocation.isNotEmpty
                                 ? endLocation
@@ -135,10 +121,11 @@ class _ParcelRequestState extends State<ParcelRequest> {
                 CustomTextField(
                   labelText: 'Sender\'s Number',
                   controller: sendersNumberController,
+                  keyboardType: TextInputType.phone,
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(
-                  labelText: 'Recevier\'s Number',
+                  labelText: 'Receiver\'s Number',
                   controller: receiversNumberController,
                   keyboardType: TextInputType.phone,
                 ),
@@ -149,14 +136,26 @@ class _ParcelRequestState extends State<ParcelRequest> {
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(
-                  labelText: 'Weight',
+                  labelText: 'Weight in Kg',
                   controller: seatingCapacityController,
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Parcel Type is required';
+                      return 'Weight is required';
                     }
-                    return null; // Return null if validation succeeds
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  labelText: 'Offered Fare in PKR',
+                  controller: fareController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Fare is required';
+                    }
+                    return null;
                   },
                 ),
                 const SizedBox(height: 16),
@@ -204,9 +203,7 @@ class _ParcelRequestState extends State<ParcelRequest> {
                   child: SizedBox(
                     width: 200,
                     child: ElevatedButton(
-                      onPressed: () {
-                        _submitForm();
-                      },
+                      onPressed: _submitForm,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.yellow,
                         foregroundColor: Colors.black,
@@ -262,8 +259,8 @@ class _ParcelRequestState extends State<ParcelRequest> {
           Provider.of<LocationProvider>(context, listen: false);
       setState(() {
         startLocation =
-            locationProvider.getStartAddress ?? 'SELECT ROUTE START POINT';
-        print(startLocation);
+            locationProvider.startAddress ?? 'SELECT ROUTE START POINT';
+        endLocation = locationProvider.endAddress ?? 'SELECT ROUTE END POINT';
       });
     });
   }
@@ -278,9 +275,12 @@ class _ParcelRequestState extends State<ParcelRequest> {
       final locationProvider =
           Provider.of<LocationProvider>(context, listen: false);
       setState(() {
-        endLocation =
-            locationProvider.getEndAddress ?? 'SELECT ROUTE END POINT';
-        print(endLocation);
+        print('locationProvider.endAddress');
+
+        print(locationProvider.endAddress);
+        startLocation =
+            locationProvider.startAddress ?? 'SELECT ROUTE START POINT';
+        endLocation = locationProvider.endAddress ?? 'SELECT ROUTE END POINT';
       });
     });
   }
@@ -296,15 +296,16 @@ class _ParcelRequestState extends State<ParcelRequest> {
           context,
           tripNameController.text,
           int.tryParse(seatingCapacityController.text) ?? 0,
-          tripType,
-          chargePerKm,
+          'One Time',
+          5.0,
           date,
           time,
           startLocation,
           endLocation,
-          userName, // Pass the retrieved user name
-          sendersNumberController.text.toString(),
-          receiversNumberController.text.toString(),
+          userName,
+          sendersNumberController.text,
+          receiversNumberController.text,
+          double.tryParse(fareController.text) ?? 0.0,
         );
       } else {
         // Handle case where user name is not available in SharedPreferences

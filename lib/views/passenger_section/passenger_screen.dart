@@ -114,6 +114,16 @@ class PassengerScreenState extends State<PassengerScreen> {
                           icon: Icons.home,
                           text: 'Home',
                           onTap: () => Navigator.pop(context)),
+
+                      _createDrawerItem(
+                        icon: Icons.receipt,
+                        text: 'Booked Trips',
+                        onTap: () => {},
+                      ),
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //   builder: (context) =>
+                      //       const TripRequestsScreen(),
+                      // ))),
                       _createDrawerItem(
                         icon: Icons.exit_to_app,
                         text: 'Logout',

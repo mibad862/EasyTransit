@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
 
 class LocationProvider extends ChangeNotifier {
-  String? startAddress;
-  String? endAddress;
+  String? _startAddress;
+  String? _endAddress;
+
+  String? get startAddress => _startAddress;
+  String? get endAddress => _endAddress;
 
   void setStartAddress(String address) {
-    startAddress = address;
-    notifyListeners(); // Notify listeners of state change
+    _startAddress = address;
+    notifyListeners();
   }
 
   void setEndAddress(String address) {
-    endAddress = address;
-    notifyListeners(); // Notify listeners of state change
+    _endAddress = address;
+    notifyListeners();
   }
 
-  String? get getStartAddress {
-    return startAddress;
-  }
-
-  String? get getEndAddress {
-    return endAddress;
-  }
-
-  @override
-  void notifyListeners() {
-    super.notifyListeners();
+  void clearAddresses() {
+    _startAddress = null;
+    _endAddress = null;
+    notifyListeners();
   }
 }
