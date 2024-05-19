@@ -236,10 +236,15 @@ class FirebaseFirestoreService {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? userName = prefs.getString('userName');
+      String? userId = prefs.getString('userId'); // Ensure userId is stored in SharedPreferences
       DateTime adjustedDate = DateTime(date.year, date.month, date.day);
 
+      if (userId == null) {
+        throw Exception('User ID is not available.');
+      }
+
       // Your Firestore logic to store trip information
-      await FirebaseFirestore.instance.collection('trips').add({
+      await FirebaseFirestore.instance.collection('trips').doc(userId).set({
         'UserName': userName,
         'startLocation': startLocation,
         'endLocation': endLocation,
@@ -252,6 +257,7 @@ class FirebaseFirestoreService {
         'contact no': contactNo,
         'vehicle no': vehicleNo
       });
+
       // Show success message or navigate to another screen
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -274,10 +280,11 @@ class FirebaseFirestoreService {
     }
   }
 
+// Helper function to convert TimeOfDay to string
   String timeToString(TimeOfDay time) {
-    final now = DateTime.now();
-    final DateTime datetime =
-        DateTime(now.year, now.month, now.day, time.hour, time.minute);
-    return datetime.toIso8601String().substring(11, 16); // HH:mm format
+    final hour = time.hour.toString().padLeft(2, '0');
+    final minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
   }
+
 }

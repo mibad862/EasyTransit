@@ -17,15 +17,20 @@ class _TripRequestsScreenState extends State<TripRequestsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final String userUid = user!.uid;
+    // print(userUid);
+
     return Scaffold(
       appBar: const CommonAppBar(title: "Trip Requests", showicon: true),
       body: Container(
         color: Colors.grey[200], // Set background color
-        child: StreamBuilder(
-          stream: FirebaseFirestore.instance
+        child: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
               .collection('Trip requests')
-              .snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              .doc(userUid)
+              .get(),
+          builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -34,13 +39,15 @@ class _TripRequestsScreenState extends State<TripRequestsScreen> {
               return const Center(
                 child: Text('Error fetching data'),
               );
+            } else if (!snapshot.hasData || !snapshot.data!.exists) {
+              return const Center(
+                child: Text('Document does not exist'),
+              );
             } else {
-              final tripRequests = snapshot.data!.docs;
+              final data = snapshot.data!.data() as Map<String, dynamic>;
               return ListView.builder(
-                itemCount: tripRequests.length,
+                itemCount: 1, // Since we are only displaying one document
                 itemBuilder: (context, index) {
-                  final tripRequest = tripRequests[index];
-                  final data = tripRequest.data() as Map<String, dynamic>;
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Card(
