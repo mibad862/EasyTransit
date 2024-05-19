@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/custom_snackbar.dart';
 import 'package:demo_project1/views/passenger_section/model/user_info_model.dart';
@@ -21,7 +23,7 @@ class FirebaseFirestoreService {
     String endLocation,
     String userName,
     String senderNumber,
-    String receiverNumber,
+    String receiverNumber, double fare,
   ) async {
     try {
       // Convert TimeOfDay to String representation
@@ -43,6 +45,7 @@ class FirebaseFirestoreService {
         'time': formattedTime, // Store formatted time
         'startLocation': startLocation,
         'endLocation': endLocation,
+        'fare': fare
       });
       print('Parcel record added successfully');
       CustomSnackbar.show(

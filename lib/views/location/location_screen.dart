@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:demo_project1/common_widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -315,18 +316,14 @@ class _LocationScreenState extends State<LocationScreen> {
                         _dropoffMarker!.position);
                     locationProvider.setStartAddress(pickupAddress);
                     locationProvider.setEndAddress(dropoffAddress);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Locations saved successfully!'),
-                      ),
-                    );
+                    CustomSnackbar.show(context,
+                        "Locations saved successfully!", SnackbarType.success);
+                    Navigator.pop(context);
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            'Please select both pickup and drop-off locations.'),
-                      ),
-                    );
+                    CustomSnackbar.show(
+                        context,
+                        "Please select both pickup and drop-off locations.",
+                        SnackbarType.error);
                   }
                 },
                 child: const Text(
