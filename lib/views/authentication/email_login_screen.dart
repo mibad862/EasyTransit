@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/common_elevated_button.dart';
 import 'package:demo_project1/common_widgets/custom_snackbar.dart';
 import 'package:demo_project1/common_widgets/custom_text_field.dart';
@@ -28,18 +27,14 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
   bool isSubmit = false;
   final _formKey = GlobalKey<FormState>();
 
-  Future<void> storeUserProfile(User user, String userName, String phoneNumber,
-      String vehicleName, String vehicleNo) async {
+  Future<void> storeUserProfile(String user) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('driverDetails')
-          .doc(user.uid)
-          .set({
-        'name': userName,
-        'phoneNumber': phoneNumber,
-        'vehicleName': vehicleName,
-        'vehicleNo': vehicleNo,
-      });
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      prefs.setString('userid', user);
+
+      print(prefs.getString('userid'));
+      print("User ID: ");
     } catch (error) {
       print('Error storing user profile: $error');
       throw error;
@@ -47,20 +42,6 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 
 // Function to retrieve profile information from Firestore
-  Future<Map<String, dynamic>> getUserProfile(User user) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-          .instance
-          .collection('driverDetails')
-          .doc(user.uid)
-          .get();
-      return snapshot.data() ??
-          {}; // Return empty map if document doesn't exist
-    } catch (error) {
-      print('Error retrieving user profile: $error');
-      throw error;
-    }
-  }
 
   Future<void> _submit(BuildContext context) async {
     setState(() {
@@ -83,6 +64,11 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
         password: passController.text,
       );
 
+      final user = FirebaseAuth.instance.currentUser;
+      final String userid = user!.uid;
+
+      storeUserProfile(userid);
+
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
@@ -98,19 +84,6 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
         isSubmit = false; // Reset to false after authentication attempt
       });
     }
-  }
-
-  Future<void> printUserProfile() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userName = prefs.getString('username');
-    String? phoneNumber = prefs.getString('phoneNumber');
-    String? vehicleName = prefs.getString('vehicleName');
-    String? vehicleNo = prefs.getString('vehicleNo');
-
-    print('User Name: $userName');
-    print('Phone Number: $phoneNumber');
-    print('Vehicle Name: $vehicleName');
-    print('Vehicle No: $vehicleNo');
   }
 
   @override

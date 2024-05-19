@@ -11,7 +11,7 @@ void _signIn(BuildContext context) {
 
   if (isLoginSuccessful) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => HomeScreen(),
+      builder: (context) => const HomeScreen(),
     ));
   }
 }
@@ -20,7 +20,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/login.png"),
             fit: BoxFit.cover,
@@ -30,10 +30,10 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 100),
+              const SizedBox(height: 100),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: TextField(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: const TextField(
                   decoration: InputDecoration(
                     labelText: 'E-Mail',
                     fillColor: Colors.white,
@@ -45,10 +45,10 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: TextField(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: const TextField(
                   decoration: InputDecoration(
                     labelText: 'Password',
                     fillColor: Colors.white,
@@ -61,7 +61,7 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.black, backgroundColor: Colors.white,
@@ -69,16 +69,16 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   _signIn(context);
                 },
-                child: Text('LOGIN'),
+                child: const Text('LOGIN'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => RegistrationPage(),
                   ));
                 },
-                child: Text(
+                child: const Text(
                   'Don\'t have an account? Sign up',
                   style: TextStyle(color: Colors.black),
                 ),
@@ -89,7 +89,7 @@ class LoginPage extends StatelessWidget {
                     builder: (context) => ForgotPasswordScreen(),
                   ));
                 },
-                child: Text(
+                child: const Text(
                   'Forgot password',
                   style: TextStyle(color: Colors.black),
                 ),

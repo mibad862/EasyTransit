@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/custom_snackbar.dart';
 import 'package:demo_project1/views/passenger_section/model/user_info_model.dart';
@@ -10,6 +8,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 class FirebaseFirestoreService {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  Future<void> storeBookedParcel(
+      String docId, Map<String, dynamic> parcelData) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      await _db.collection('booked_parcels').doc(userId).set({
+        ...parcelData,
+        'documentId': docId, // Save the document ID
+      });
+    } else {
+      throw Exception('User is not logged in');
+    }
+  }
 
   Future<void> storeParcelRecord(
     BuildContext context,
@@ -23,7 +36,8 @@ class FirebaseFirestoreService {
     String endLocation,
     String userName,
     String senderNumber,
-    String receiverNumber, double fare,
+    String receiverNumber,
+    double fare,
   ) async {
     try {
       // Convert TimeOfDay to String representation
@@ -103,9 +117,11 @@ class FirebaseFirestoreService {
       QuerySnapshot querySnapshot =
           await _firestore.collection("parcelRecords").get();
 
-      List<Map<String, dynamic>> parcelRecords = querySnapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
+      List<Map<String, dynamic>> parcelRecords = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        data['documentId'] = doc.id; // Add the documentId to the map
+        return data;
+      }).toList();
 
       print(parcelRecords);
 
@@ -114,6 +130,23 @@ class FirebaseFirestoreService {
       print('Error fetching parcel records: $e');
       throw e; // Rethrow the error for handling in UI
     }
+  }
+
+  Future<Map<String, dynamic>> getBookedParcel() async {
+    String? userId = _auth.currentUser?.uid;
+
+    if (userId == null) {
+      throw Exception('User not logged in');
+    }
+
+    DocumentSnapshot docSnapshot =
+        await _firestore.collection('booked_parcels').doc(userId).get();
+
+    if (!docSnapshot.exists) {
+      throw Exception('No booked parcels found for this user');
+    }
+
+    return docSnapshot.data() as Map<String, dynamic>;
   }
 
   Future<void> storeAmbulanceBooking(
@@ -221,8 +254,8 @@ class FirebaseFirestoreService {
         'date': adjustedDate,
         'time': timeToString(time),
         'chargePerKm': chargePerKm,
-        'contactNo': contactNo,
-        'vehicleNo': vehicleNo
+        'contact no': contactNo,
+        'vehicle no': vehicleNo
       });
 
       // Show success message or navigate to another screen
@@ -253,5 +286,5 @@ class FirebaseFirestoreService {
     final minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
   }
-  
+
 }

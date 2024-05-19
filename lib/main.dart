@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const Welcome(),
         '/home': (context) => const HomeScreen(), // Update to LoginPage
         '/welcome': (context) => const Welcome(), // Add the welcome route
-        '/signup': (context) => const EmailRegisterScreen()
+        '/signup': (context) => const EmailRegisterScreen(),
 
         // '/otp': (context) => const OtpScreen(), // Update to LoginPage
 

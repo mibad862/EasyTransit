@@ -1,6 +1,7 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/views/bus_schedule/bus_schedule.dart';
 import 'package:demo_project1/views/emergency_screen.dart/emergency_service.dart';
+import 'package:demo_project1/views/parcel_delivery_screen/confirm_parcel_screen.dart';
 import 'package:demo_project1/views/passenger_section/passenger_screen.dart';
 import 'package:demo_project1/views/privacy_policy/privacy_policy_screen.dart';
 import 'package:demo_project1/views/trip_requests/trip_request.dart';
@@ -84,6 +85,13 @@ class DriverScreen extends StatelessWidget {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>
                                     const TripRequestsScreen(),
+                              ))),
+                      _createDrawerItem(
+                          icon: Icons.receipt,
+                          text: 'Booked Parcels',
+                          onTap: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ConfirmParcelScreen(),
                               ))),
                       _createDrawerItem(
                         icon: Icons.exit_to_app,
