@@ -1,5 +1,5 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
-import 'package:demo_project1/services/firebase_firestore_services.dart'; // Import your Firestore service
+import 'package:demo_project1/services/firebase_firestore_services.dart';
 import 'package:flutter/material.dart';
 
 import 'widget/driver_parcel_option.dart';
@@ -10,8 +10,7 @@ class ParcelDelivery extends StatelessWidget {
     return Scaffold(
       appBar: const CommonAppBar(title: "Parcel Delivery View", showicon: true),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: FirebaseFirestoreService()
-            .getParcelRecords(), // Fetch parcel records from Firestore
+        future: FirebaseFirestoreService().getParcelRecords(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -22,17 +21,15 @@ class ParcelDelivery extends StatelessWidget {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final record = snapshot.data![index];
-                // Render parcel record widget here
-                return parcelOption(context,
-                    tripName: record['tripName'],
-                    sender: record['senderNumber'],
-                    receiver: record['recevierNumber'],
-                    startLocation: record['startLocation'],
-                    endLocation: record['endLocation'],
-                    fare: record['fare']
-                    
-                    // Add more details as needed
-                    );
+                return ParcelOption(
+                  docId: record['documentId'],
+                  tripName: record['tripName'],
+                  sender: record['senderNumber'],
+                  receiver: record['recevierNumber'],
+                  startLocation: record['startLocation'],
+                  endLocation: record['endLocation'],
+                  fare: record['fare'],
+                );
               },
             );
           } else {
