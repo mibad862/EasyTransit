@@ -1,5 +1,6 @@
 import 'package:demo_project1/firebase_options.dart';
 import 'package:demo_project1/home_screen.dart';
+import 'package:demo_project1/views/authentication/email_login_screen.dart';
 import 'package:demo_project1/views/authentication/email_register_screen.dart';
 import 'package:demo_project1/views/location/provider/location_provider.dart';
 import 'package:demo_project1/views/welcome_screen.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(), // Update to LoginPage
         '/welcome': (context) => const Welcome(), // Add the welcome route
         '/signup': (context) => const EmailRegisterScreen(),
+        '/ulogin': (context) => const EmailLoginScreen(),
 
         // '/otp': (context) => const OtpScreen(), // Update to LoginPage
 

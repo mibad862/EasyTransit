@@ -6,7 +6,9 @@ import 'package:demo_project1/views/driver_section/driver_mainscreen.dart';
 import 'package:demo_project1/views/ride_view_screen/ride_view_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../common_widgets/webview_screen.dart';
 import '../emergency_screen.dart/emergency_service.dart';
 import '../privacy_policy/privacy_policy_screen.dart';
 
@@ -18,6 +20,7 @@ class PassengerScreen extends StatefulWidget {
 }
 
 class PassengerScreenState extends State<PassengerScreen> {
+
   Widget _createBoxItem(
       {required String text,
       required String imgPath,
@@ -236,9 +239,11 @@ class PassengerScreenState extends State<PassengerScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => BusSchedulePage(),
-                ),
+                // MaterialPageRoute(
+                //   builder: (context) => BusSchedulePage(),
+                // ),
+                MaterialPageRoute(builder: (context) => WebViewScreen())
+
               );
               // Handle the action for View Bus Schedule
             },

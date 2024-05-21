@@ -8,6 +8,7 @@ import 'package:demo_project1/views/trip_requests/trip_request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../common_widgets/webview_screen.dart';
 import '../../services/firebase_firestore_services.dart';
 import '../create_ride_screen/create_ride.dart';
 import '../parcel_delivery_screen/parcel_delivery.dart';
@@ -208,13 +209,21 @@ class DriverScreen extends StatelessWidget {
           text: 'Bus Schedule',
           imgPath: "assets/images/van.png",
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BusSchedulePage(),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => BusSchedulePage(),
+            //   ),
+            // );
             // Handle the action for Bus Schedule
+            Navigator.push(
+                context,
+                // MaterialPageRoute(
+                //   builder: (context) => BusSchedulePage(),
+                // ),
+                MaterialPageRoute(builder: (context) => WebViewScreen())
+
+            );
           },
         ),
       ],
