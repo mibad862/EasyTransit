@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/common_elevated_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common_widgets/common_bottom_headline.dart';
@@ -9,6 +10,7 @@ import '../../utils/field_validator.dart';
 import '../verify_email/verify_email.dart';
 import '../widgets/custom_email_textfield.dart';
 import '../widgets/custom_password_textfield.dart';
+import 'email_login_screen.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -157,7 +159,7 @@ class _EmailRegisterScreenState extends State<EmailRegisterScreen> {
                       height: screenHeight * 0.130,
                     ),
                     const CommonBottomHeadline(
-                      navigationPath: '/login',
+                      navigationPath: '/ulogin',
                       text1: "Already have an account",
                       text2: "Sign In",
                     ),

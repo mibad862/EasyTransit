@@ -50,8 +50,8 @@ class RideViewScreen extends StatelessWidget {
                 time: _parseTimeString(trip["time"]),
                 date: (trip["date"] as Timestamp).toDate(),
                 seatCapacity: trip['seatingCapacity'].toString(),
-                contactNo: trip['contactNo'].toString(),
-                vehicleNo: trip['vehicleNo'].toString(),
+                // contactNo: trip['contactNo'].toString(),
+                // vehicleNo: trip['vehicleNo'].toString(),
               );
             },
           );

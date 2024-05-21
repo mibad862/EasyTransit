@@ -61,6 +61,8 @@ dependencies:
   dio:
   open_file:
   file_picker:
+  webview_flutter: ^4.7.0
+  flutter_inappwebview: ^6.0.0
 
 
 
