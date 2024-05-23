@@ -36,19 +36,19 @@ class ConversationList extends StatelessWidget {
                     radius: 24,
                     random: false,
                   ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     messageText,
                     maxLines: 1,
@@ -70,14 +70,14 @@ class ConversationList extends StatelessWidget {
                     fontSize: 12,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 isMessageRead
-                    ? Icon(
+                    ? const Icon(
                         Icons.done_all,
                         color: Colors.blue,
                         size: 16,
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
               ],
             ),
           ],

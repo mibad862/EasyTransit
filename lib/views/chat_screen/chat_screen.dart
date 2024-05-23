@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/views/chat_screen/ChatDetailPage.dart';
 import 'package:demo_project1/views/chat_screen/provider/chat_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 import '../../services/chat/chat_services.dart';
 import 'model/chat_user_model.dart';
@@ -53,55 +53,10 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CommonAppBar(title: "chat", showicon: true),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  const Text(
-                    "Chat",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      const Center(child: CircularProgressIndicator());
-                      _showUserListDialog(context);
-                    },
-                    child: Container(
-                      padding:
-                          const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.pink[50],
-                      ),
-                      child: const Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.add,
-                            color: Colors.pink,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 2,
-                          ),
-                          Text(
-                            "Add New",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
           _buildSearch(),
           Flexible(
             child: StreamBuilder<String?>(
@@ -166,7 +121,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                       child: Center(
                                         child: Text(
                                           (user.unreadMessages.toString()),
-                                          style: const TextStyle(color: Colors.white),
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         ),
                                       ),
                                     )
@@ -353,7 +309,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-
 }
 
 class ChatUsers {
@@ -401,8 +356,6 @@ Future<List<SearchUsers>> fetchChatUsers(
       throw Exception('Failed to load chat users: ${response.statusCode}');
     }
   } catch (error) {
-    
-
     throw Exception('Failed to load chat users: $error');
   }
 }

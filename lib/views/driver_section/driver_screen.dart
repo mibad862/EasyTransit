@@ -1,5 +1,5 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
-import 'package:demo_project1/views/bus_schedule/bus_schedule.dart';
+import 'package:demo_project1/views/chat_screen/chat_screen.dart';
 import 'package:demo_project1/views/emergency_screen.dart/emergency_service.dart';
 import 'package:demo_project1/views/parcel_delivery_screen/confirm_parcel_screen.dart';
 import 'package:demo_project1/views/passenger_section/passenger_screen.dart';
@@ -7,6 +7,7 @@ import 'package:demo_project1/views/privacy_policy/privacy_policy_screen.dart';
 import 'package:demo_project1/views/trip_requests/trip_request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common_widgets/webview_screen.dart';
 import '../../services/firebase_firestore_services.dart';
@@ -98,6 +99,12 @@ class DriverScreen extends StatelessWidget {
                         icon: Icons.exit_to_app,
                         text: 'Logout',
                         onTap: () {
+                          // Clear SharedPreferences
+                          SharedPreferences.getInstance().then((prefs) {
+                            prefs.clear();
+                          });
+
+                          // Sign out Firebase user
                           FirebaseAuth.instance.signOut().then((_) {
                             Navigator.pop(context); // Close the drawer
                             Navigator.pushReplacementNamed(
@@ -108,6 +115,7 @@ class DriverScreen extends StatelessWidget {
                           });
                         },
                       ),
+                      
                       _createDrawerItem(
                           icon: Icons.security,
                           text: 'Privacy Policy',
@@ -221,9 +229,15 @@ class DriverScreen extends StatelessWidget {
                 // MaterialPageRoute(
                 //   builder: (context) => BusSchedulePage(),
                 // ),
-                MaterialPageRoute(builder: (context) => WebViewScreen())
-
-            );
+                MaterialPageRoute(builder: (context) => WebViewScreen()));
+          },
+        ),
+        _createBoxItem(
+          text: 'Chat Screen',
+          imgPath: "assets/images/chat-message-icon.png",
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ChatScreen()));
           },
         ),
       ],

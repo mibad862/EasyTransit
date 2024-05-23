@@ -5,8 +5,12 @@ import '../../../services/firebase_firestore_services.dart';
 
 class ParcelOption extends StatelessWidget {
   final String docId;
+  final String senderName;
+
   final String tripName;
   final String sender;
+    final String senderId;
+
   final String receiver;
   final String startLocation;
   final String endLocation;
@@ -15,6 +19,9 @@ class ParcelOption extends StatelessWidget {
   const ParcelOption({
     Key? key,
     required this.docId,
+    required this.senderId,
+
+    required this.senderName,
     required this.tripName,
     required this.sender,
     required this.receiver,
@@ -26,7 +33,9 @@ class ParcelOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final record = {
+      'senderId':senderId,
       'tripName': tripName,
+      'senderName': senderName,
       'senderNumber': sender,
       'receiverNumber': receiver,
       'startLocation': startLocation,

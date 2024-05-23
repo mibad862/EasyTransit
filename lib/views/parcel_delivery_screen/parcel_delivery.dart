@@ -23,6 +23,8 @@ class ParcelDelivery extends StatelessWidget {
                 final record = snapshot.data![index];
                 return ParcelOption(
                   docId: record['documentId'],
+                  senderId: record['userId'],
+                  senderName: record['userName'],
                   tripName: record['tripName'],
                   sender: record['senderNumber'],
                   receiver: record['recevierNumber'],

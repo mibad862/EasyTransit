@@ -5,8 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../views/chat_screen/ChatDetailPage.dart';
 import '../../views/chat_screen/model/chat_user_model.dart';
 
-
-
 class ChatServices extends ChangeNotifier {
   late SharedPreferences prefs;
   String? userID;
@@ -103,7 +101,6 @@ class ChatServices extends ChangeNotifier {
           _firestore.collection('messages').doc(chatRoomID).collection('chats');
       await chatsCollection.doc(messageId).update({'isSeen': true});
     } catch (error) {
-
       print('Error marking message as seen: $error');
       throw error;
     }
@@ -205,11 +202,13 @@ class ChatServices extends ChangeNotifier {
           .collection('chats')
           .add(newMessage);
 
+      print("Message sent: $newMessage");
+
       await updateChattedUsers(
           currentUserID, receiverID, userName, userImage, context);
 
       await updateChattedUsers(receiverID, currentUserID, currentUserName!,
-          currentUserImage!, context);
+          currentUserImage ?? "", context);
     } catch (error) {
       print('Error sending message: $error');
     }
@@ -269,7 +268,6 @@ class ChatServices extends ChangeNotifier {
         print('Chatted user already exists!');
       }
     } catch (error) {
-      
       print('Error updating chatted users: $error');
     }
   }
@@ -378,7 +376,6 @@ class ChatServices extends ChangeNotifier {
       }
       return null;
     } catch (error) {
-
       print('Error getting last message: $error');
       return null;
     }

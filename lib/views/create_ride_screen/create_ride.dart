@@ -281,7 +281,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
       setState(() {
         startLocation =
             locationProvider.startAddress ?? 'SELECT ROUTE START POINT';
-        print(startLocation);
+        endLocation = locationProvider.endAddress ?? 'SELECT ROUTE END POINT';
       });
     });
   }
@@ -296,8 +296,9 @@ class _CreateTripPageState extends State<CreateTripPage> {
       final locationProvider =
           Provider.of<LocationProvider>(context, listen: false);
       setState(() {
+        startLocation =
+            locationProvider.startAddress ?? 'SELECT ROUTE START POINT';
         endLocation = locationProvider.endAddress ?? 'SELECT ROUTE END POINT';
-        print(endLocation);
       });
     });
   }
