@@ -227,51 +227,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          flexibleSpace: SafeArea(
-            child: Container(
-              padding: const EdgeInsets.only(right: 16),
-              child: Row(
-                children: <Widget>[
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(width: 2),
-                  widget.userImage == null || widget.userImage.endsWith("/")
-                      ? CircleAvatar(
-                          backgroundImage:
-                              CachedNetworkImageProvider(widget.userImage),
-                        )
-                      : ProfilePicture(
-                          name: widget.userName,
-                          fontsize: 16,
-                          radius: 24,
-                          random: false,
-                        ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          widget.userName,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+          title: ListTile(
+            leading: _buildProfileImage(),
+            title: Text(
+              widget.userName,
+              style: TextStyle(color: Colors.black, fontSize: 20),
             ),
           ),
         ),
@@ -300,6 +260,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                           double? progress = downloadprocess[index];
                           final isCurrentUserMessage =
                               messages[index].senderID == userID;
+
+                          //XCtstouHR5YEKaKNfYOqykq3aOv2
 
                           if (messages[index].messageType == 'image') {
                             // Display image message
@@ -535,6 +497,20 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         );
       },
     );
+  }
+
+  Widget _buildProfileImage() {
+    String profileName = widget.userName.isNotEmpty ? widget.userName : 'User';
+    return widget.userImage.isNotEmpty
+        ? CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(widget.userImage),
+          )
+        : ProfilePicture(
+            name: profileName,
+            fontsize: 16,
+            radius: 24,
+            random: false,
+          );
   }
 }
 

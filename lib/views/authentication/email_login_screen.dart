@@ -67,7 +67,9 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
       final user = FirebaseAuth.instance.currentUser;
       final String userid = user!.uid;
 
-      storeUserProfile(userid);
+      storeUserProfile(
+        userid,
+      );
 
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomeScreen()));

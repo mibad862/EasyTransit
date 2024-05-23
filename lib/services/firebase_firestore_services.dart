@@ -26,6 +26,7 @@ class FirebaseFirestoreService {
 
   Future<void> storeParcelRecord(
     BuildContext context,
+    String userid,
     String tripName,
     int seatingCapacity,
     String tripType,
@@ -48,6 +49,7 @@ class FirebaseFirestoreService {
           _firestore.collection('parcelRecords');
 
       userCollection.add({
+        'userId': userId,
         'userName': userName,
         'senderNumber': senderNumber,
         'recevierNumber': receiverNumber,
@@ -236,7 +238,8 @@ class FirebaseFirestoreService {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? userName = prefs.getString('userName');
-      String? userId = prefs.getString('userId'); // Ensure userId is stored in SharedPreferences
+      String? userId = prefs
+          .getString('userId'); // Ensure userId is stored in SharedPreferences
       DateTime adjustedDate = DateTime(date.year, date.month, date.day);
 
       if (userId == null) {
@@ -286,5 +289,4 @@ class FirebaseFirestoreService {
     final minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
   }
-
 }

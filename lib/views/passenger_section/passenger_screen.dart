@@ -1,14 +1,14 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/services/firebase_firestore_services.dart';
-import 'package:demo_project1/views/bus_schedule/bus_schedule.dart';
 import 'package:demo_project1/views/dilver_parcel_screen/create_parcel_request.dart';
 import 'package:demo_project1/views/driver_section/driver_mainscreen.dart';
 import 'package:demo_project1/views/ride_view_screen/ride_view_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common_widgets/webview_screen.dart';
+import '../chat_screen/chat_screen.dart';
 import '../emergency_screen.dart/emergency_service.dart';
 import '../privacy_policy/privacy_policy_screen.dart';
 
@@ -20,7 +20,6 @@ class PassengerScreen extends StatefulWidget {
 }
 
 class PassengerScreenState extends State<PassengerScreen> {
-
   Widget _createBoxItem(
       {required String text,
       required String imgPath,
@@ -78,6 +77,10 @@ class PassengerScreenState extends State<PassengerScreen> {
               return Text('Error: ${snapshot.error}');
             } else {
               final userInformation = snapshot.data;
+              SharedPreferences.getInstance().then((prefs) {
+                prefs.setString('userName', userInformation!.name!);
+              });
+
               return Drawer(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -131,6 +134,12 @@ class PassengerScreenState extends State<PassengerScreen> {
                         icon: Icons.exit_to_app,
                         text: 'Logout',
                         onTap: () {
+                          // Clear SharedPreferences
+                          SharedPreferences.getInstance().then((prefs) {
+                            prefs.clear();
+                          });
+
+                          // Sign out Firebase user
                           FirebaseAuth.instance.signOut().then((_) {
                             Navigator.pop(context); // Close the drawer
                             Navigator.pushReplacementNamed(
@@ -141,6 +150,7 @@ class PassengerScreenState extends State<PassengerScreen> {
                           });
                         },
                       ),
+
                       _createDrawerItem(
                           icon: Icons.security,
                           text: 'Privacy Policy',
@@ -238,14 +248,20 @@ class PassengerScreenState extends State<PassengerScreen> {
             imgPath: "assets/images/van.png",
             onTap: () {
               Navigator.push(
-                context,
-                // MaterialPageRoute(
-                //   builder: (context) => BusSchedulePage(),
-                // ),
-                MaterialPageRoute(builder: (context) => WebViewScreen())
-
-              );
+                  context,
+                  // MaterialPageRoute(
+                  //   builder: (context) => BusSchedulePage(),
+                  // ),
+                  MaterialPageRoute(builder: (context) => WebViewScreen()));
               // Handle the action for View Bus Schedule
+            },
+          ),
+          _createBoxItem(
+            text: 'Chat Screen',
+            imgPath: "assets/images/chat-message-icon.png",
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ChatScreen()));
             },
           ),
         ],

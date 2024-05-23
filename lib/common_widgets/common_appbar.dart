@@ -13,7 +13,14 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: showicon ? const Icon(Icons.arrow_back_outlined) : null,
+      leading: showicon
+          ? IconButton(
+              icon: Icon(Icons.arrow_back_outlined),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          : null,
       title: Text(title),
       backgroundColor: Colors.yellow,
       elevation: 0,

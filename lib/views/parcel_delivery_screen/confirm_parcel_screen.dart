@@ -31,6 +31,8 @@ class ConfirmParcelScreen extends StatelessWidget {
                 snapshot.data!.data() as Map<String, dynamic>;
             String docIdFromFirestore = snapshot.data!.id;
             var record = snapshot.data!;
+            String username = record['senderName'];
+            String id = record['senderId'];
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -57,18 +59,39 @@ class ConfirmParcelScreen extends StatelessWidget {
                           backgroundColor:
                               MaterialStatePropertyAll(Colors.amberAccent)),
                       onPressed: () {
+                        print(record['senderName']);
+                        print('reciver id');
+                        print(docIdFromFirestore);
+                        print('Senders id');
+
+                        print(user!.uid);
+
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => ChatDetailPage(
+                        //       userName: username.isNotEmpty
+                        //           ? username
+                        //           : "Default Name", // Fallback to a default name
+                        //       userImage:
+                        //           'https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
+                        //       receiverID: docIdFromFirestore,
+                        //       senderID: user!.uid,
+                        //     ),
+                        //   ),
+
+                        // );
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ChatDetailPage(
-                              userName:
-                                  "Hafeez", // Pass appropriate username if needed
+                              userName: username.isNotEmpty
+                                  ? username
+                                  : "Default Name", // Fallback to a default name
                               userImage:
-                                  "", // Pass appropriate userimage if needed
-                              receiverID:
-                                  docIdFromFirestore, // Pass docIdFromFirestore as receiverID
-                              senderID: user!.uid ??
-                                  "", // Pass user's uid as senderID
+                                  'https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
+                              receiverID: id,
+                              senderID: user!.uid,
                             ),
                           ),
                         );

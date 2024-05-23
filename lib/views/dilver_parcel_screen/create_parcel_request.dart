@@ -291,9 +291,11 @@ class _ParcelRequestState extends State<ParcelRequest> {
       form.save();
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? userName = prefs.getString('userName');
+      String? userid = prefs.getString('userid');
       if (userName != null && userName.isNotEmpty) {
         FirebaseFirestoreService().storeParcelRecord(
           context,
+          userid!,
           tripNameController.text,
           int.tryParse(seatingCapacityController.text) ?? 0,
           'One Time',
