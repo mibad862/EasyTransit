@@ -8,7 +8,6 @@ import 'package:demo_project1/views/widgets/custom_password_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../common_widgets/common_bottom_headline.dart';
 import '../../utils/field_validator.dart';
 
@@ -31,9 +30,7 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
   Future<void> storeUserProfile(String user) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-
       prefs.setString('userid', user);
-
       print(prefs.getString('userid'));
       print("User ID: ");
     } catch (error) {
@@ -57,33 +54,38 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
     _formKey.currentState!.save();
 
     try {
-      UserCredential userCredential =
-      await _firebaseAuth.signInWithEmailAndPassword(
+      // Authenticate with Firebase
+      UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: emailController.text,
         password: passController.text,
       );
 
-      final user = FirebaseAuth.instance.currentUser;
-      final String userid = user!.uid;
+      // Fetch user ID
+      String userId = userCredential.user!.uid;
 
-      // Check if user is approved
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(userid).get();
-      if (userDoc.exists && userDoc['status'] == 'approved') {
-        // User is approved, proceed to home screen
-        storeUserProfile(userid);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
+      // Check approval status from Firestore
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+      if (userDoc.exists) {
+        if (userDoc['status'] == 'approved') {
+          // User is approved, proceed to home screen
+          await storeUserProfile(userId);
+          Navigator.pushReplacementNamed(context, '/home');
+        } else {
+          // User exists but is not approved, show a message
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Your account is on pending approval by Admin.'),
+          ));
+        }
       } else {
-        // User is not approved, show a message
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Your account is on pending approval by Admin.'),
+        // User does not exist in Firestore, show a message
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('User record not found in the database.'),
         ));
       }
     } on FirebaseAuthException catch (error) {
       // Handle different authentication errors
-      String errorMessage = error.code.toString();
+      String errorMessage = error.message ?? 'An error occurred. Please try again.';
 
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -95,6 +97,7 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -129,14 +132,13 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                     emailController: emailController,
                     screenHeight: screenHeight,
                   ),
-                  SizedBox(
-                    height: screenHeight * 0.008,
-                  ),
+                  SizedBox(height: screenHeight * 0.008),
                   CustomPasswordTextField(
                     screenHeight: screenHeight,
                     passController: passController,
                     validator: FieldValidator.validatePassword,
                   ),
+                  SizedBox(height: screenHeight * 0.010),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
@@ -196,6 +198,7 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(height: screenHeight * 0.020),
                   CommonElevatedButton(
                     buttonColor: Colors.purple,
                     fontSize: 15,
@@ -210,7 +213,7 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
                     height: screenHeight * 0.210,
                   ),
                   const CommonBottomHeadline(
-                    navigationPath: '/signup',
+                    navigationPath: '/email-signup',
                     text1: "Don't have an account?",
                     text2: "Sign Up",
                   ),

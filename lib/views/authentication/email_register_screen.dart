@@ -154,7 +154,7 @@ class _EmailRegisterScreenState extends State<EmailRegisterScreen> {
                       height: screenHeight * 0.130,
                     ),
                     const CommonBottomHeadline(
-                      navigationPath: '/ulogin',
+                      navigationPath: '/email-login',
                       text1: "Already have an account",
                       text2: "Sign In",
                     ),
@@ -176,7 +176,7 @@ class _EmailRegisterScreenState extends State<EmailRegisterScreen> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.030),
+        contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
         hintText: "Full Name",
         prefixIcon: const Icon(Icons.person),
       ),

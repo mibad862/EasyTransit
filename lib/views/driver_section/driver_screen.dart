@@ -108,7 +108,7 @@ class DriverScreen extends StatelessWidget {
                           FirebaseAuth.instance.signOut().then((_) {
                             Navigator.pop(context); // Close the drawer
                             Navigator.pushReplacementNamed(
-                                context, '/login'); // Navigate to login screen
+                                context, '/welcome'); // Navigate to login screen
                           }).catchError((error) {
                             print("Error signing out: $error");
                             // Handle error if any

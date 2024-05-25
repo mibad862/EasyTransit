@@ -4,17 +4,19 @@ import 'package:demo_project1/views/rating/rating_screen.dart';
 import 'package:flutter/material.dart';
 
 class DriverMainScreen extends StatefulWidget {
+  const DriverMainScreen({super.key});
+
   @override
-  _DriverMainScreenState createState() => _DriverMainScreenState();
+  DriverMainScreenState createState() => DriverMainScreenState();
 }
 
-class _DriverMainScreenState extends State<DriverMainScreen> {
+class DriverMainScreenState extends State<DriverMainScreen> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
     const DriverScreen(),
     const RatingScreen(),
-    ProfileScreen()
+    DriverProfileScreen()
   ];
 
   void _onItemTapped(int index) {

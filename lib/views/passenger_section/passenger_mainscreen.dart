@@ -2,6 +2,8 @@ import 'package:demo_project1/views/passenger_section/passenger_screen.dart';
 import 'package:flutter/material.dart';
 
 class PassengerMainScreen extends StatefulWidget {
+  const PassengerMainScreen({super.key});
+
   @override
   _PassengerMainScreenState createState() => _PassengerMainScreenState();
 }

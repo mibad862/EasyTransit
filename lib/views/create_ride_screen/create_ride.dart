@@ -11,11 +11,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../location/provider/location_provider.dart';
 
 class CreateTripPage extends StatefulWidget {
+  const CreateTripPage({super.key});
+
   @override
-  _CreateTripPageState createState() => _CreateTripPageState();
+  CreateTripPageState createState() => CreateTripPageState();
 }
 
-class _CreateTripPageState extends State<CreateTripPage> {
+class CreateTripPageState extends State<CreateTripPage> {
   late String startLocation;
   late String endLocation;
   final _formKey = GlobalKey<FormState>();
@@ -200,7 +202,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                   onPressed: () => _setTripType('One Time'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        tripType == 'One Time' ? Colors.yellow : Colors.grey,
+                    tripType == 'One Time' ? Colors.yellow : Colors.grey,
                   ),
                   child: const Text('One Time'),
                 ),
@@ -208,7 +210,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                   onPressed: () => _setTripType('Daily'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        tripType == 'Daily' ? Colors.yellow : Colors.grey,
+                    tripType == 'Daily' ? Colors.yellow : Colors.grey,
                   ),
                   child: const Text('Daily'),
                 ),
@@ -231,19 +233,18 @@ class _CreateTripPageState extends State<CreateTripPage> {
     );
   }
 
-  Future<bool> _isProfileComplete() async {
+  Future<bool> _checkProfileExists() async {
     try {
       // Get the current user
       User? user = FirebaseAuth.instance.currentUser;
-      print(user!.uid);
 
       if (user != null) {
         // Get a reference to the document
         DocumentSnapshot<Map<String, dynamic>> snapshot =
-            await FirebaseFirestore.instance
-                .collection('driverDetails')
-                .doc(user.uid) // Use the current user's UID as the document ID
-                .get();
+        await FirebaseFirestore.instance
+            .collection('driverDetails')
+            .doc(user.uid) // Use the current user's UID as the document ID
+            .get();
 
         // Check if the document exists
         bool isComplete = snapshot.exists;
@@ -269,6 +270,31 @@ class _CreateTripPageState extends State<CreateTripPage> {
     }
   }
 
+  Future<bool> _checkStatusApproved() async {
+    try {
+      // Get the current user
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // Get a reference to the document
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance
+            .collection('driverDetails')
+            .doc(user.uid) // Use the current user's UID as the document ID
+            .get();
+
+        // Check if the status is approved
+        return snapshot.exists && snapshot['status'] == 'approved';
+      } else {
+        // User not logged in
+        return false;
+      }
+    } catch (error) {
+      print('Error checking status approval: $error');
+      return false; // Return false in case of any errors
+    }
+  }
+
   void _selectStartPoint() {
     Navigator.push(
       context,
@@ -277,7 +303,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
       ),
     ).then((_) {
       final locationProvider =
-          Provider.of<LocationProvider>(context, listen: false);
+      Provider.of<LocationProvider>(context, listen: false);
       setState(() {
         startLocation =
             locationProvider.startAddress ?? 'SELECT ROUTE START POINT';
@@ -294,7 +320,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
       ),
     ).then((_) {
       final locationProvider =
-          Provider.of<LocationProvider>(context, listen: false);
+      Provider.of<LocationProvider>(context, listen: false);
       setState(() {
         startLocation =
             locationProvider.startAddress ?? 'SELECT ROUTE START POINT';
@@ -315,9 +341,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
     String? phoneNumber = prefs.getString('phoneNumber');
     String? vehicleNo = prefs.getString('vehicleNo');
 
-    final isProfileComplete =
-        await _isProfileComplete(); // Check if the profile is complete
-    if (isProfileComplete) {
+    final isProfileComplete = await _checkProfileExists();
+    final isStatusApproved = await _checkStatusApproved();
+
+    if (isProfileComplete && isStatusApproved) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         // If the form is valid, submit the trip details
@@ -335,12 +362,12 @@ class _CreateTripPageState extends State<CreateTripPage> {
             contactNo: phoneNumber ?? "");
       }
     } else {
-      // Show an alert if the user's profile is incomplete
+      // Show an alert if the user's profile is incomplete or not approved
       showCupertinoDialog(
         context: context,
         builder: (context) => CupertinoAlertDialog(
           title: const Text(
-            'Profile Incomplete',
+            'Profile Incomplete or Not Approved',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -352,7 +379,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Oops! It seems like your profile is incomplete.',
+                'Oops! It seems like your profile is incomplete or not approved by admin.',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black87, // Content color
@@ -360,7 +387,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
               ),
               SizedBox(height: 16),
               Text(
-                'Please complete your profile before creating a trip.',
+                'Please complete your profile and get it approved by admin before creating a trip.',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black87, // Content color
@@ -371,7 +398,6 @@ class _CreateTripPageState extends State<CreateTripPage> {
           actions: [
             CupertinoDialogAction(
               onPressed: () {
-                Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
               child: const Text(
