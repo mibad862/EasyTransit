@@ -8,7 +8,6 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -231,7 +230,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             leading: _buildProfileImage(),
             title: Text(
               widget.userName,
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              style: const TextStyle(color: Colors.black, fontSize: 20),
             ),
           ),
         ),
@@ -501,16 +500,24 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   Widget _buildProfileImage() {
     String profileName = widget.userName.isNotEmpty ? widget.userName : 'User';
-    return widget.userImage.isNotEmpty
-        ? CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(widget.userImage),
-          )
-        : ProfilePicture(
-            name: profileName,
-            fontsize: 16,
-            radius: 24,
-            random: false,
-          );
+    return SizedBox(
+        height: 20,
+        width: 30,
+        child: widget.userImage.isNotEmpty
+            ? CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(widget.userImage),
+              )
+            : const CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(
+                    "https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"),
+              )
+        // : ProfilePicture(
+        //     name: profileName,
+        //     fontsize: 16,
+        //     radius: 24,
+        //     random: false,
+        //   ),
+        );
   }
 }
 
