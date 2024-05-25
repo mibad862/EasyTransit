@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/common_elevated_button.dart';
 import 'package:demo_project1/common_widgets/custom_snackbar.dart';
 import 'package:demo_project1/common_widgets/custom_text_field.dart';
@@ -41,8 +42,6 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
     }
   }
 
-// Function to retrieve profile information from Firestore
-
   Future<void> _submit(BuildContext context) async {
     setState(() {
       isSubmit = true; // Set to true to show loading indicator
@@ -59,7 +58,7 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
 
     try {
       UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
+      await _firebaseAuth.signInWithEmailAndPassword(
         email: emailController.text,
         password: passController.text,
       );
@@ -67,12 +66,21 @@ class EmailLoginScreenState extends State<EmailLoginScreen> {
       final user = FirebaseAuth.instance.currentUser;
       final String userid = user!.uid;
 
-      storeUserProfile(
-        userid,
-      );
-
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      // Check if user is approved
+      final userDoc = await FirebaseFirestore.instance.collection('users').doc(userid).get();
+      if (userDoc.exists && userDoc['status'] == 'approved') {
+        // User is approved, proceed to home screen
+        storeUserProfile(userid);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      } else {
+        // User is not approved, show a message
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Your account is on pending approval by Admin.'),
+        ));
+      }
     } on FirebaseAuthException catch (error) {
       // Handle different authentication errors
       String errorMessage = error.code.toString();
