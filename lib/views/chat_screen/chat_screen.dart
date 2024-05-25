@@ -15,8 +15,6 @@ import '../../services/chat/chat_services.dart';
 import 'model/chat_user_model.dart';
 import 'model/search_user.dart';
 
-// Model class representing a chat
-
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
@@ -39,7 +37,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     initSharedPreferences();
-
     super.initState();
   }
 
@@ -62,10 +59,8 @@ class _ChatScreenState extends State<ChatScreen> {
             child: StreamBuilder<String?>(
               stream: ChatServices().getUserIDStream(),
               builder: (context, snapshot) => StreamBuilder<List<ChatUser>>(
-                stream: ChatServices().chattedUsersStream(userID!,
-                    context), // Stream that provides chatted users data
+                stream: ChatServices().chattedUsersStream(userID!, context),
                 builder: (context, snapshot) {
-                  print(snapshot.data);
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
@@ -83,18 +78,23 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemBuilder: (context, index) {
                         final user = chattedUsers[index];
                         return ListTile(
-                          leading: user.userImage == null ||
-                                  user.userImage.endsWith("/")
-                              ? CircleAvatar(
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      user.userImage),
-                                )
-                              : ProfilePicture(
-                                  name: user.userName,
-                                  fontsize: 16,
-                                  radius: 24,
-                                  random: true,
-                                ),
+                          leading: SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: user.userImage == ""
+                                ? const CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        "https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"),
+                                  )
+                                : ProfilePicture(
+                                    name: user.userName.isNotEmpty
+                                        ? user.userName
+                                        : "User",
+                                    fontsize: 16,
+                                    radius: 24,
+                                    random: true,
+                                  ),
+                          ),
                           title: Text(user.userName.toUpperCase()),
                           subtitle: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -142,8 +142,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ),
                               ),
                             );
-
-                            // Navigate to chat detail page or do something else
                           },
                         );
                       },
@@ -157,12 +155,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-
-  // @override
-  // void dispose() {
-  //   _messageController.dispose();
-  //   super.dispose();
-  // }
 
   Widget _buildSearch() {
     return Container(
@@ -195,10 +187,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _showUserListDialog(BuildContext context) async {
-    // Show circular progress indicator while fetching data
     showDialog(
       context: context,
-      barrierDismissible: false, // Prevent dismissing dialog by tapping outside
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return const AlertDialog(
           content: Column(
@@ -217,7 +208,6 @@ class _ChatScreenState extends State<ChatScreen> {
     final List<SearchUsers> allUsers =
         await fetchChatUsers(userID!, "", context);
 
-    // Dismiss the loading dialog
     Navigator.pop(context);
 
     List<SearchUsers> displayedUsers = List.from(allUsers);
@@ -261,19 +251,23 @@ class _ChatScreenState extends State<ChatScreen> {
                               return SizedBox(
                                 width: 100,
                                 child: ListTile(
-                                  leading: user.image == null ||
-                                          !user.image.endsWith("/")
-                                      ? CircleAvatar(
-                                          backgroundImage:
-                                              CachedNetworkImageProvider(
-                                                  user.image),
-                                        )
-                                      : ProfilePicture(
-                                          name: user.adminName,
-                                          fontsize: 16,
-                                          radius: 24,
-                                          random: true,
-                                        ),
+                                  leading: SizedBox(
+                                    width: 48,
+                                    height: 48,
+                                    child: user.image == null ||
+                                            !user.image.endsWith("/")
+                                        ? CircleAvatar(
+                                            backgroundImage:
+                                                CachedNetworkImageProvider(
+                                                    user.image),
+                                          )
+                                        : ProfilePicture(
+                                            name: user.adminName,
+                                            fontsize: 16,
+                                            radius: 24,
+                                            random: true,
+                                          ),
+                                  ),
                                   title: Text(user.adminName),
                                   onTap: () {
                                     Navigator.pop(context);
@@ -294,9 +288,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _navigateToUserScreen(BuildContext context, SearchUsers user) {
-    // Navigate to the user screen
-    print("User id is${userID!}");
-    print("reciver id is${user.id}");
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -317,7 +308,7 @@ class ChatUsers {
   String image;
   String time;
   String text, secondaryText;
-  int unreadMessages; // New field to store the count of unread messages
+  int unreadMessages;
   ChatUsers({
     this.name,
     this.messageText,
@@ -361,6 +352,5 @@ Future<List<SearchUsers>> fetchChatUsers(
 }
 
 String _formatTimestamp(DateTime timestamp) {
-  // Format timestamp as desired (e.g., HH:mm)
   return DateFormat.Hm().format(timestamp);
 }
