@@ -10,12 +10,14 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../common_widgets/custom_snackbar.dart';
 
-class ProfileScreen extends StatefulWidget {
+class DriverProfileScreen extends StatefulWidget {
+  const DriverProfileScreen({super.key});
+
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  DriverProfileScreenState createState() => DriverProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class DriverProfileScreenState extends State<DriverProfileScreen> {
   var size, height, width;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phonenoController = TextEditingController();
@@ -31,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
 
     // Retrieve user profile data from Firestore
-    getDiverdata();
+    getDriverData();
   }
 
   Future<void> _pickImage() async {
@@ -44,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> getDiverdata() async {
+  Future<void> getDriverData() async {
     if (user != null) {
       FirebaseFirestore.instance
           .collection('driverDetails')
@@ -79,13 +81,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .child('${user.uid}.jpg');
           final uploadTask = storageRef.putFile(File(_avatarImagePath));
           final TaskSnapshot uploadSnapshot =
-              await uploadTask.whenComplete(() {});
+          await uploadTask.whenComplete(() {});
 
           // Get download URL of the uploaded image
           imageUrl = await uploadSnapshot.ref.getDownloadURL();
         }
 
-        // Store profile information along with image URL in Firestore
+        // Store profile information along with image URL in Firestore for approval
         await FirebaseFirestore.instance
             .collection('driverDetails')
             .doc(user.uid)
@@ -94,17 +96,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           'phoneNumber': _phonenoController.text,
           'vehicleName': _vehicleNameController.text,
           'vehicleNo': _vehiclenoController.text,
-          if (imageUrl != null)
-            'imageUrl': imageUrl, // Store image URL if available
+          if (imageUrl != null) 'imageUrl': imageUrl, // Store image URL if available
+          'status': 'pending', // Set initial status to pending
+          'createdAt': Timestamp.now(),
+          'userId': user.uid,
           // Add other fields as needed
         });
 
         CustomSnackbar.show(
-            context, "Profile saved Successfully", SnackbarType.success);
+            context, "Profile submitted for approval by admin", SnackbarType.success);
       } catch (error) {
-        CustomSnackbar.show(context, "Can't Update Profile Some error occurred",
+        CustomSnackbar.show(context, "Can't submit profile. An error occurred",
             SnackbarType.error);
-        print('Failed to save profile: $error');
+        print('Failed to submit profile: $error');
       }
     }
   }
@@ -203,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: ElevatedButton(
                         style: const ButtonStyle(
                           backgroundColor:
-                              MaterialStatePropertyAll(Colors.amberAccent),
+                          MaterialStatePropertyAll(Colors.amberAccent),
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {

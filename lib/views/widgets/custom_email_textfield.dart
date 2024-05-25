@@ -26,7 +26,7 @@ class CustomEmailTextField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.032),
+        contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
         hintText: "Email Address",
         prefixIcon: const Icon(Icons.email),
       ),

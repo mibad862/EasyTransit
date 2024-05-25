@@ -41,11 +41,10 @@ class MyApp extends StatelessWidget {
       routes: {
         // ignore: prefer_const_constructors
         '/': (context) => SplashScreen(),
-        '/login': (context) => const Welcome(),
         '/home': (context) => const HomeScreen(), // Update to LoginPage
         '/welcome': (context) => const Welcome(), // Add the welcome route
-        '/signup': (context) => const EmailRegisterScreen(),
-        '/ulogin': (context) => const EmailLoginScreen(),
+        '/email-signup': (context) => const EmailRegisterScreen(),
+        '/email-login': (context) => const EmailLoginScreen(),
 
         // '/otp': (context) => const OtpScreen(), // Update to LoginPage
 

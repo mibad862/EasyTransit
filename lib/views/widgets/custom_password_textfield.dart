@@ -33,7 +33,7 @@ class CustomPasswordTextFieldState extends State<CustomPasswordTextField> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         contentPadding:
-        EdgeInsets.symmetric(vertical: widget.screenHeight * 0.030),
+        EdgeInsets.symmetric(vertical: widget.screenHeight * 0.025),
         hintText: "Password",
         prefixIcon: const Icon(Icons.key),
         suffixIcon: IconButton(
