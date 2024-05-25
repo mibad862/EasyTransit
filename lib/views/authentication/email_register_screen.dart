@@ -2,15 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/common_elevated_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../common_widgets/common_bottom_headline.dart';
 import '../../utils/field_validator.dart';
 import '../verify_email/verify_email.dart';
 import '../widgets/custom_email_textfield.dart';
 import '../widgets/custom_password_textfield.dart';
-import 'email_login_screen.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -25,7 +22,7 @@ class _EmailRegisterScreenState extends State<EmailRegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
-  static TextEditingController nameController = TextEditingController();
+  TextEditingController nameController = TextEditingController(); // Changed to non-static
   bool isPassVisible = false;
   bool isConfirmPassVisible = false;
   bool isSubmit = false;
@@ -49,7 +46,7 @@ class _EmailRegisterScreenState extends State<EmailRegisterScreen> {
 
     try {
       UserCredential userCredential =
-          await _firebase.createUserWithEmailAndPassword(
+      await _firebase.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passController.text,
       );
@@ -57,14 +54,12 @@ class _EmailRegisterScreenState extends State<EmailRegisterScreen> {
       await users.doc(userCredential.user!.uid).set({
         'full_name': nameController.text.toString(),
         'email': emailController.text.toString(),
+        'status': 'pending', // Add status field with 'pending' value
       });
 
       // Save the user's full name locally using SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('fullName', nameController.text.toString());
-
-      // Send email verification
-      await userCredential.user!.sendEmailVerification();
 
       // Navigate to the EmailVerificationScreen
       Navigator.push(context,
