@@ -65,7 +65,7 @@ class PassengerScreenState extends State<PassengerScreen> {
     return Scaffold(
       appBar: const CommonAppBar(
         title: "Passenger Screen",
-        showicon: false,
+        showIcon: false,
       ),
       drawer: FutureBuilder(
         builder: (context, snapshot) {

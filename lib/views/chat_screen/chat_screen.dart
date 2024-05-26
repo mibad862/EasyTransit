@@ -49,20 +49,20 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return const Scaffold(
-        appBar: CommonAppBar(title: "chat", showicon: true),
+        appBar: CommonAppBar(title: "chat", showIcon: true),
         body: Center(child: CircularProgressIndicator()),
       );
     }
 
     if (userID == null) {
       return const Scaffold(
-        appBar: CommonAppBar(title: "chat", showicon: true),
+        appBar: CommonAppBar(title: "chat", showIcon: true),
         body: Center(child: Text("User ID not found")),
       );
     }
 
     return Scaffold(
-      appBar: const CommonAppBar(title: "chat", showicon: true),
+      appBar: const CommonAppBar(title: "chat", showIcon: true),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

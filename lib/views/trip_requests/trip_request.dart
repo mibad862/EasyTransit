@@ -22,7 +22,7 @@ class _TripRequestsScreenState extends State<TripRequestsScreen> {
     // print(userUid);
 
     return Scaffold(
-      appBar: const CommonAppBar(title: "Trip Requests", showicon: true),
+      appBar: const CommonAppBar(title: "Trip Requests", showIcon: true),
       body: Container(
         color: Colors.grey[200], // Set background color
         child: FutureBuilder<DocumentSnapshot>(

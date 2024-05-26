@@ -72,7 +72,7 @@ class _BusSchedulePageState extends State<BusSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(title: "Bus Schedule", showicon: true),
+      appBar: const CommonAppBar(title: "Bus Schedule", showIcon: true),
       body: Column(
         children: [
           Padding(
