@@ -199,14 +199,14 @@ class FirebaseFirestoreService {
     }
   }
 
-
   Future<void> storeAmbulanceBooking(
-    BuildContext context,
-    String name,
-    String location,
-    String time,
-    DateTime date,
-  ) async {
+      BuildContext context,
+      String name,
+      String location,
+      String time,
+      DateTime date,
+      String phoneNumber, // Added phone number parameter
+      ) async {
     try {
       String? userId = _auth.currentUser?.uid;
 
@@ -227,6 +227,7 @@ class FirebaseFirestoreService {
         'location': location,
         'time': time,
         'date': date,
+        'phoneNumber': phoneNumber, // Added phone number field
         'status': 'pending',
       });
 

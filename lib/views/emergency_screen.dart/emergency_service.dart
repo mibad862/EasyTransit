@@ -1,4 +1,5 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
+import 'package:demo_project1/common_widgets/common_elevated_button.dart';
 import 'package:demo_project1/services/firebase_firestore_services.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -17,15 +18,16 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController(); // Added phone number controller
 
-  late DateTime date = DateTime.now(); // Initialize date variable
+  DateTime? selectedDate; // Initialize selectedDate as null
 
   @override
   void dispose() {
     _nameController.dispose();
     _locationController.dispose();
     _timeController.dispose();
-    date = DateTime.now();
+    _phoneController.dispose(); // Dispose phone number controller
 
     super.dispose();
   }
@@ -42,23 +44,28 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
   }
 
   void _preBookAmbulance() {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && selectedDate != null) {
       // Implement pre-booking logic
       print('Pre-booking ambulance for:');
       print('Name: ${_nameController.text}');
+      print('Phone: ${_phoneController.text}'); // Print the phone number
       print('Location: ${_locationController.text}');
       print('Time: ${_timeController.text}');
+      print('Date: $selectedDate'); // Print the selected date
 
       FirebaseFirestoreService().storeAmbulanceBooking(
-          context,
-          _nameController.text.toString(),
-          _locationController.text.toString(),
-          _timeController.text.toString(),
-          date);
+        context,
+        _nameController.text,
+        _locationController.text,
+        _timeController.text,
+        selectedDate!,
+        _phoneController.text, // Pass the phone number
+      );
 
-      _nameController.text = "";
-      _locationController.text = "";
-      _timeController.text = "";
+      _nameController.clear();
+      _locationController.clear();
+      _timeController.clear();
+      _phoneController.clear(); // Clear the phone number field
     }
   }
 
@@ -106,6 +113,9 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: const CommonAppBar(title: "Emergency Service", showIcon: true),
       body: SingleChildScrollView(
@@ -114,21 +124,23 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
           child: Form(
             key: _formKey, // Attach the form key
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                ElevatedButton(
+                CommonElevatedButton(
+                  buttonElevation: 2.0,
+                  fontSize: 14,
+                  borderRadius: 15.0,
+                  width: screenWidth * 0.420,
+                  height: screenHeight * 0.055,
+                  buttonColor: Colors.red,
                   onPressed: _makePhoneCall,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red, // Background color
-                    foregroundColor:
-                        Colors.white, // Text Color (Foreground color)
-                  ),
-                  child: const Text('Call Ambulance'),
+                  text: "Call Ambulance",
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: screenHeight * 0.040),
                 TextFormField(
                   controller: _nameController,
                   decoration: const InputDecoration(
-                    labelText: 'Name',
+                    labelText: 'Full Name',
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
@@ -138,16 +150,31 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: screenHeight * 0.015),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: _phoneController, // Added phone number field
+                  decoration: const InputDecoration(
+                    labelText: 'Phone Number',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your phone number';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: screenHeight * 0.015),
                 TextFormField(
                   controller: _locationController,
                   decoration: InputDecoration(
-                    labelText: 'Location',
+                    labelText: 'Current Location',
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.my_location),
                       onPressed:
-                          _getCurrentLocation, // Updated to call the method
+                      _getCurrentLocation, // Updated to call the method
                     ),
                   ),
                   readOnly: true,
@@ -158,7 +185,7 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: screenHeight * 0.015),
                 InkWell(
                   onTap: _selectDate,
                   child: InputDecorator(
@@ -170,7 +197,9 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          '${date.year}-${date.month}-${date.day}',
+                          selectedDate != null
+                              ? '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}'
+                              : 'Select Date',
                           style: const TextStyle(fontSize: 16),
                         ),
                         const Icon(Icons.calendar_today),
@@ -178,7 +207,7 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: screenHeight * 0.015),
                 TextFormField(
                   controller: _timeController,
                   decoration: const InputDecoration(
@@ -188,7 +217,7 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
                   onTap: () async {
                     // Prevent Keyboard from appearing
                     FocusScope.of(context).requestFocus(new FocusNode());
-                    // Show Date Picker Here
+                    // Show Time Picker Here
                     final TimeOfDay? pickedTime = await showTimePicker(
                       initialTime: TimeOfDay.now(),
                       context: context,
@@ -204,8 +233,15 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
+                SizedBox(height: screenHeight * 0.040),
+                CommonElevatedButton(
+                  buttonElevation: 2.0,
+                  borderRadius: 16.0,
+                  buttonColor: Colors.amber,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  height: screenHeight * 0.060,
+                  width: screenWidth * 0.580,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _preBookAmbulance();
@@ -213,12 +249,7 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
                       Navigator.pop(context);
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow, // Background color
-                    foregroundColor:
-                        Colors.black, // Text Color (Foreground color)
-                  ),
-                  child: const Text('Pre-Book Ambulance'),
+                  text: 'Pre-Book Ambulance',
                 ),
               ],
             ),
@@ -231,13 +262,13 @@ class EmergencyServicePageState extends State<EmergencyServicePage> {
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: date,
+      initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(DateTime.now().year + 10),
     );
-    if (pickedDate != null && pickedDate != date) {
+    if (pickedDate != null) {
       setState(() {
-        date = pickedDate;
+        selectedDate = pickedDate; // Update the selectedDate variable
       });
     }
   }
