@@ -21,7 +21,7 @@ class RideViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(title: "Find a Ride", showicon: true),
+      appBar: const CommonAppBar(title: "Find a Ride", showIcon: true),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('trips').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

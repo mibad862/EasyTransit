@@ -42,7 +42,7 @@ class _ParcelRequestState extends State<ParcelRequest> {
     return Scaffold(
       appBar: const CommonAppBar(
         title: 'Deliver Parcel',
-        showicon: true,
+        showIcon: true,
       ),
       body: SingleChildScrollView(
         child: Padding(

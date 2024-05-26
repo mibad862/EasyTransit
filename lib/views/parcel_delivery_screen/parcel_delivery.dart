@@ -8,7 +8,7 @@ class ParcelDelivery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(title: "Parcel Delivery View", showicon: true),
+      appBar: const CommonAppBar(title: "Parcel Delivery View", showIcon: true),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: FirebaseFirestoreService().getParcelRecords(),
         builder: (context, snapshot) {

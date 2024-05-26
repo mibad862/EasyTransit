@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final bool showicon;
+  final bool showIcon;
 
   const CommonAppBar({
     required this.title,
-    required this.showicon,
-    Key? key,
-  }) : super(key: key);
+    required this.showIcon,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: showicon
+      automaticallyImplyLeading: true,
+      leading: showIcon
           ? IconButton(
-              icon: Icon(Icons.arrow_back_outlined),
+              icon: const Icon(Icons.arrow_back_outlined),
               onPressed: () {
                 Navigator.pop(context);
               },

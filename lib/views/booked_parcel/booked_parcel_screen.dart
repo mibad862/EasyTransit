@@ -15,7 +15,7 @@ class ConfirmParcelScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      appBar: const CommonAppBar(title: "Booked Parcel", showicon: true),
+      appBar: const CommonAppBar(title: "Booked Parcel", showIcon: true),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
             .collection("booked_parcels")
