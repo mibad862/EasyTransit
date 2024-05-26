@@ -15,7 +15,7 @@ class _RatingScreenState extends State<RatingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(title: "Customers Rating", showicon: true),
+      appBar: const CommonAppBar(title: "Customers Rating", showIcon: true),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Ratings').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

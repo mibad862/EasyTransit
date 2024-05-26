@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/common_appbar.dart';
+import 'package:demo_project1/common_widgets/common_elevated_button.dart';
 import 'package:demo_project1/common_widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -81,7 +82,7 @@ class DriverProfileScreenState extends State<DriverProfileScreen> {
               .child('${user.uid}.jpg');
           final uploadTask = storageRef.putFile(File(_avatarImagePath));
           final TaskSnapshot uploadSnapshot =
-          await uploadTask.whenComplete(() {});
+              await uploadTask.whenComplete(() {});
 
           // Get download URL of the uploaded image
           imageUrl = await uploadSnapshot.ref.getDownloadURL();
@@ -96,15 +97,17 @@ class DriverProfileScreenState extends State<DriverProfileScreen> {
           'phoneNumber': _phonenoController.text,
           'vehicleName': _vehicleNameController.text,
           'vehicleNo': _vehiclenoController.text,
-          if (imageUrl != null) 'imageUrl': imageUrl, // Store image URL if available
-          'status': 'pending', // Set initial status to pending
+          if (imageUrl != null) 'imageUrl': imageUrl,
+          // Store image URL if available
+          'status': 'pending',
+          // Set initial status to pending
           'createdAt': Timestamp.now(),
           'userId': user.uid,
           // Add other fields as needed
         });
 
-        CustomSnackbar.show(
-            context, "Profile submitted for approval by admin", SnackbarType.success);
+        CustomSnackbar.show(context, "Profile submitted for approval by admin",
+            SnackbarType.success);
       } catch (error) {
         CustomSnackbar.show(context, "Can't submit profile. An error occurred",
             SnackbarType.error);
@@ -119,7 +122,7 @@ class DriverProfileScreenState extends State<DriverProfileScreen> {
     height = size.height;
     width = size.width;
     return Scaffold(
-      appBar: const CommonAppBar(title: "My Profile", showicon: true),
+      appBar: const CommonAppBar(title: "My Profile", showIcon: false),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -143,11 +146,11 @@ class DriverProfileScreenState extends State<DriverProfileScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 0.03 * width),
+                margin: EdgeInsets.symmetric(horizontal: 0.04 * width),
                 child: Column(
                   children: [
                     CustomTextField(
-                      labelText: "Name",
+                      labelText: "Full Name",
                       controller: _nameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -160,7 +163,7 @@ class DriverProfileScreenState extends State<DriverProfileScreen> {
                       height: 10,
                     ),
                     CustomTextField(
-                      labelText: "Phone no",
+                      labelText: "Phone No.",
                       controller: _phonenoController,
                       keyboardType: TextInputType.phone,
                       validator: (value) {
@@ -190,7 +193,7 @@ class DriverProfileScreenState extends State<DriverProfileScreen> {
                       height: 10,
                     ),
                     CustomTextField(
-                      labelText: "Vehicle No",
+                      labelText: "Vehicle No.",
                       controller: _vehiclenoController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -199,23 +202,21 @@ class DriverProfileScreenState extends State<DriverProfileScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: 0.7 * width,
-                      child: ElevatedButton(
-                        style: const ButtonStyle(
-                          backgroundColor:
-                          MaterialStatePropertyAll(Colors.amberAccent),
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _saveProfile(context);
-                          }
-                        },
-                        child: const Text("Save"),
-                      ),
+                    SizedBox(height: height * 0.030),
+                    CommonElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _saveProfile(context);
+                        }
+                      },
+                      text: "Save",
+                      buttonColor: Colors.amberAccent,
+                      textColor: Colors.purple,
+                      fontSize: 16,
+                      width: 0.80 * width,
+                      height: height * 0.060,
+                      borderRadius: 15.0,
+                      buttonElevation: 2.0,
                     ),
                   ],
                 ),

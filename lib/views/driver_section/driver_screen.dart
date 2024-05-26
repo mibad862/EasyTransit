@@ -28,7 +28,7 @@ class DriverScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: const CommonAppBar(title: "Driver Screen", showicon: false),
+      appBar: const CommonAppBar(title: "Driver Screen", showIcon: false),
       drawer: FutureBuilder(
         future: FirebaseFirestoreService().getUserInformation(),
         builder: (context, snapshot) {

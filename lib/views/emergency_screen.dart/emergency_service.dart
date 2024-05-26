@@ -105,7 +105,7 @@ class _EmergencyServicePageState extends State<EmergencyServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(title: "Emergency Service", showicon: true),
+      appBar: const CommonAppBar(title: "Emergency Service", showIcon: true),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

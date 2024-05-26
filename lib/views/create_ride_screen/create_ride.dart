@@ -41,7 +41,7 @@ class CreateTripPageState extends State<CreateTripPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(title: "Create Trip", showicon: true),
+      appBar: const CommonAppBar(title: "Create Trip", showIcon: true),
       body: Form(
         key: _formKey,
         child: ListView(

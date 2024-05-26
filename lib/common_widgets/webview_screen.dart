@@ -16,7 +16,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: "Bus Schedule", showicon: true),
+      appBar: CommonAppBar(title: "Bus Schedule", showIcon: true),
       body: InAppWebView(
         initialUrlRequest: URLRequest(
             url: WebUri.uri(Uri.parse("https://pkbuses.com/bus-services/"))),
