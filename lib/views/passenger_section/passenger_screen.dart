@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common_widgets/webview_screen.dart';
+import '../booked_trip_screen/booked_trip_screen.dart';
 import '../chat_screen/chat_screen.dart';
 import '../emergency_screen.dart/emergency_service.dart';
 import '../privacy_policy/privacy_policy_screen.dart';
@@ -124,7 +125,10 @@ class PassengerScreenState extends State<PassengerScreen> {
                       _createDrawerItem(
                         icon: Icons.receipt,
                         text: 'Booked Trips',
-                        onTap: () => {},
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const BookedTripsScreen()),
+                        ),
                       ),
                       // Navigator.of(context).push(MaterialPageRoute(
                       //   builder: (context) =>
@@ -142,8 +146,8 @@ class PassengerScreenState extends State<PassengerScreen> {
                           // Sign out Firebase user
                           FirebaseAuth.instance.signOut().then((_) {
                             Navigator.pop(context); // Close the drawer
-                            Navigator.pushReplacementNamed(
-                                context, '/welcome'); // Navigate to login screen
+                            Navigator.pushReplacementNamed(context,
+                                '/welcome'); // Navigate to login screen
                           }).catchError((error) {
                             print("Error signing out: $error");
                             // Handle error if any

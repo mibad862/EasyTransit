@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_project1/common_widgets/common_appbar.dart';
-import 'package:demo_project1/views/widgets/ride_book.dart';
+import 'package:demo_project1/views/ride_book/ride_book.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -85,7 +85,6 @@ Widget rideOption(
           title: Text(driverName),
           subtitle: Text(carType),
           trailing: ElevatedButton(
-            child: const Text('BOOK NOW'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellow,
             ),
@@ -108,6 +107,7 @@ Widget rideOption(
                 ),
               );
             },
+            child: const Text('BOOK NOW'),
           ),
         ),
         Padding(

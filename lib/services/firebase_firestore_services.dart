@@ -151,6 +151,55 @@ class FirebaseFirestoreService {
     return docSnapshot.data() as Map<String, dynamic>;
   }
 
+   Future<void> storeBookedTrip({
+    required BuildContext context,
+    required String name,
+    required String contactNumber,
+    required int maleCount,
+    required int femaleCount,
+    required int kidsCount,
+    required String driverName,
+    required String carType,
+    required String pickUp,
+    required String dropOff,
+    required DateTime date,
+    required DateTime time,
+    required String seatCapacity,
+  }) async {
+    try {
+      // Reference to the Firestore collection
+      CollectionReference tripBooked = _firestore.collection('trip_booked');
+
+      // Store the booking details in Firestore using user UUID as document ID
+      await tripBooked.doc(_auth.currentUser!.uid).set({
+        'name': name,
+        'contactNumber': contactNumber,
+        'maleCount': maleCount,
+        'femaleCount': femaleCount,
+        'kidsCount': kidsCount,
+        'driverName': driverName,
+        'carType': carType,
+        'pickUp': pickUp,
+        'dropOff': dropOff,
+        'date': date,
+        'time': time,
+        'seatCapacity': seatCapacity,
+      });
+
+      // Show success message
+      CustomSnackbar.show(
+        context,
+        "Your ride request has been successfully submitted",
+        SnackbarType.success,
+      );
+
+    } catch (e) {
+      // Show error message if something went wrong
+      CustomSnackbar.show(context, "Error: $e", SnackbarType.error);
+    }
+  }
+
+
   Future<void> storeAmbulanceBooking(
     BuildContext context,
     String name,
@@ -277,6 +326,7 @@ class FirebaseFirestoreService {
     required double chargePerKm,
     required String contactNo,
     required String vehicleNo,
+    required String userid,
   }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -292,6 +342,7 @@ class FirebaseFirestoreService {
       // Your Firestore logic to store trip information
       await FirebaseFirestore.instance.collection('trips').doc(userId).set({
         'UserName': userName,
+        'userId': userId,
         'startLocation': startLocation,
         'endLocation': endLocation,
         'tripName': tripName,

@@ -26,7 +26,7 @@ class ConfirmParcelScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
+          } else if (snapshot.hasData && snapshot.data?.data() != null) {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             String docIdFromFirestore = snapshot.data!.id;
@@ -99,6 +99,7 @@ class ConfirmParcelScreen extends StatelessWidget {
                         "Send a Message",
                         style: TextStyle(color: Colors.black),
                       )),
+                  
                   const SizedBox(height: 24.0),
                   // Your existing UI code for buttons
                 ],

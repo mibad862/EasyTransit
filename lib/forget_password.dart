@@ -19,21 +19,21 @@ class ForgotPasswordScreen extends StatelessWidget {
     return Scaffold(
 
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/login.png"), // Ensure this is the correct path to your image asset
             fit: BoxFit.cover,
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Spacer(flex: 3),
+              const Spacer(flex: 3),
 
-              SizedBox(height: 20),
-              TextField(
+              const SizedBox(height: 20),
+              const TextField(
                 decoration: InputDecoration(
                   labelText: 'E-Mail',
                   fillColor: Colors.white,
@@ -45,20 +45,20 @@ class ForgotPasswordScreen extends StatelessWidget {
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   _showResetConfirmationDialog(context);
                 },
-                child: Text(
-                  'DONE',
-                  style: TextStyle(color: Colors.black),
-                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                 ),
+                child: const Text(
+                  'DONE',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
-              Spacer(flex: 3),
+              const Spacer(flex: 3),
             ],
           ),
         ),
@@ -72,11 +72,11 @@ class ForgotPasswordScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Password Reset Confirmation'),
-          content: Text('Please check your email, a reset link has been sent.'),
+          title: const Text('Password Reset Confirmation'),
+          content: const Text('Please check your email, a reset link has been sent.'),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 Navigator.of(context).pop(); // Navigate back to the previous screen
