@@ -156,29 +156,72 @@ class FirebaseFirestoreService {
     String name,
     String location,
     String time,
-    DateTime date, // Initialize date variable
+    DateTime date,
   ) async {
     try {
       String? userId = _auth.currentUser?.uid;
 
-      CollectionReference userCollection = _firestore
+      if (userId == null) {
+        CustomSnackbar.show(context, 'User not logged in', SnackbarType.error);
+        return;
+      }
+
+      DocumentReference userDoc = _firestore
           .collection('users')
           .doc(userId)
-          .collection('ambulanceBookings');
+          .collection('ambulanceBookings')
+          .doc(userId);
 
-      userCollection.add({
+      await userDoc.set({
+        'userId': userId,
         'name': name,
         'location': location,
         'time': time,
         'date': date,
+        'status': 'pending',
       });
-      print('Ambulance booking added successfully');
-      CustomSnackbar.show(context, 'Ambulance booking added successfully',
-          SnackbarType.success);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: <Widget>[
+              Icon(
+                Icons.check_circle_outline,
+                color: Colors.white,
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Ambulance booking request submitted for approval',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
     } catch (e) {
-      print('Error adding ambulance booking: $e');
-      CustomSnackbar.show(
-          context, 'Error adding ambulance booking', SnackbarType.error);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: <Widget>[
+              Icon(
+                Icons.error_outline,
+                color: Colors.white,
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Error adding ambulance booking',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 

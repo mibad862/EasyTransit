@@ -6,11 +6,13 @@ import 'package:location/location.dart' as loc;
 import 'package:url_launcher/url_launcher.dart';
 
 class EmergencyServicePage extends StatefulWidget {
+  const EmergencyServicePage({super.key});
+
   @override
-  _EmergencyServicePageState createState() => _EmergencyServicePageState();
+  EmergencyServicePageState createState() => EmergencyServicePageState();
 }
 
-class _EmergencyServicePageState extends State<EmergencyServicePage> {
+class EmergencyServicePageState extends State<EmergencyServicePage> {
   final _formKey = GlobalKey<FormState>(); // Create a GlobalKey for the form
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();

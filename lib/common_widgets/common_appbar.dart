@@ -13,7 +13,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: true,
       leading: showIcon
           ? IconButton(
               icon: const Icon(Icons.arrow_back_outlined),
