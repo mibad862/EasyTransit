@@ -110,7 +110,7 @@ class _BookingPageState extends State<BookingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(title: "Ride Booking", showicon: true),
+      appBar: const CommonAppBar(title: "Ride Booking", showIcon: true),
       body: Column(
         children: <Widget>[
           // Map section (dummy container for illustration)

@@ -49,7 +49,7 @@ class _BookedTripsScreenState extends State<BookedTripsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(title: "Booked Trips", showicon: true),
+      appBar: const CommonAppBar(title: "Booked Trips", showIcon: true),
       body: tripDetails == null
           ? const Center(child: CircularProgressIndicator())
           : Padding(
