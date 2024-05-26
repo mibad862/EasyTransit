@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/common_widgets/custom_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BookingPage extends StatefulWidget {
   final String driverName;
@@ -12,14 +14,11 @@ class BookingPage extends StatefulWidget {
   final DateTime date;
   final DateTime time;
   final String seatCapacity;
-  // final String contactNo;
-  // final String vehicleNo;
   final String documentId;
 
   const BookingPage({
     Key? key,
-    required this.documentId, // Add document ID parameter
-
+    required this.documentId,
     required this.driverName,
     required this.carType,
     required this.pickUp,
@@ -27,8 +26,6 @@ class BookingPage extends StatefulWidget {
     required this.date,
     required this.time,
     required this.seatCapacity,
-    // required this.contactNo,
-    // required this.vehicleNo,
   }) : super(key: key);
 
   @override
@@ -39,9 +36,30 @@ class _BookingPageState extends State<BookingPage> {
   int maleCount = 0;
   int femaleCount = 0;
   int kidsCount = 0;
+  late SharedPreferences prefs;
+  String? userID;
+
+  @override
+  void initState() {
+    super.initState();
+    initSharedPreferences();
+  }
+
+  Future<void> initSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userID = prefs.getString('userid');
+    });
+  }
 
   void _saveBookingDetails(
       BuildContext context, String name, String contactNumber) async {
+    if (userID == null) {
+      CustomSnackbar.show(
+          context, "User ID is not available", SnackbarType.error);
+      return;
+    }
+
     try {
       // Reference to the Firestore collection
       CollectionReference tripRequests =
@@ -54,6 +72,25 @@ class _BookingPageState extends State<BookingPage> {
         'maleCount': maleCount,
         'femaleCount': femaleCount,
         'kidsCount': kidsCount,
+      });
+
+      CollectionReference tripBooked =
+          FirebaseFirestore.instance.collection('trip_booked');
+
+      // Store the booking details in Firestore using user UUID as document ID
+      await tripBooked.doc(userID).set({
+        'name': name,
+        'contactNumber': contactNumber,
+        'maleCount': maleCount,
+        'femaleCount': femaleCount,
+        'kidsCount': kidsCount,
+        'driverName': widget.driverName,
+        'carType': widget.carType,
+        'pickUp': widget.pickUp,
+        'dropOff': widget.dropOff,
+        'date': widget.date,
+        'time': widget.time,
+        'seatCapacity': widget.seatCapacity,
       });
 
       // Show success message
@@ -73,9 +110,7 @@ class _BookingPageState extends State<BookingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ride Booking'),
-      ),
+      appBar: const CommonAppBar(title: "Ride Booking", showicon: true),
       body: Column(
         children: <Widget>[
           // Map section (dummy container for illustration)
@@ -115,13 +150,13 @@ class _BookingPageState extends State<BookingPage> {
                   trailing: Text(widget.seatCapacity.toString()),
                 ),
                 const Divider(),
-                ListTile(
-                  title: const Text('Contact No'),
-                  // trailing: Text(widget.contactNo),
+                const ListTile(
+                  title: Text('Contact No'),
+                  // trailing: Text(widget.contactNo ?? 'N/A'),
                 ),
-                ListTile(
-                  title: const Text('Vehicle No'),
-                  // trailing: Text(widget.vehicleNo),
+                const ListTile(
+                  title: Text('Vehicle No'),
+                  // trailing: Text(widget.vehicleNo ?? 'N/A'),
                 ),
                 const Divider(),
                 CounterWidget(
@@ -148,10 +183,10 @@ class _BookingPageState extends State<BookingPage> {
                     onPressed: () {
                       _requestBooking(context);
                     },
-                    child: const Text('Request Booking'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.yellow,
                     ),
+                    child: const Text('Request Booking'),
                   ),
                 ),
               ],
@@ -222,12 +257,9 @@ class _BookingPageState extends State<BookingPage> {
             onPressed: () {
               if (name.isNotEmpty && contactNumber.isNotEmpty) {
                 // Proceed with booking logic
-                CustomSnackbar.show(
-                    context, "Your Ride Message is Sent", SnackbarType.success);
-
                 _saveBookingDetails(context, name, contactNumber);
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context).pop(); // Close the dialog
+                // Close the dialog only once
+                Navigator.of(context).pop();
               } else {
                 // Show error if name or contact number is empty
                 CustomSnackbar.show(

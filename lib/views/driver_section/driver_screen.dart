@@ -1,7 +1,7 @@
 import 'package:demo_project1/common_widgets/common_appbar.dart';
 import 'package:demo_project1/views/chat_screen/chat_screen.dart';
 import 'package:demo_project1/views/emergency_screen.dart/emergency_service.dart';
-import 'package:demo_project1/views/parcel_delivery_screen/confirm_parcel_screen.dart';
+import 'package:demo_project1/views/booked_parcel/booked_parcel_screen.dart';
 import 'package:demo_project1/views/passenger_section/passenger_screen.dart';
 import 'package:demo_project1/views/privacy_policy/privacy_policy_screen.dart';
 import 'package:demo_project1/views/trip_requests/trip_request.dart';

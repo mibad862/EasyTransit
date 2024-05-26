@@ -90,6 +90,7 @@ class _ParcelRequestState extends State<ParcelRequest> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
+                
                 GestureDetector(
                   onTap: _selectEndPoint,
                   child: Container(
@@ -117,6 +118,7 @@ class _ParcelRequestState extends State<ParcelRequest> {
                     ),
                   ),
                 ),
+                
                 const SizedBox(height: 24),
                 CustomTextField(
                   labelText: 'Sender\'s Number',

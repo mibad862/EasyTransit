@@ -65,33 +65,27 @@ class CreateTripPageState extends State<CreateTripPage> {
                     const Icon(Icons.location_on, color: Colors.green),
                     const SizedBox(width: 8),
                     Expanded(
-                      // Wrap the Text widget with Expanded
-                      flex: 1, // Set flex property to 1
-                      child: FittedBox(
-                        fit: BoxFit.none,
-                        child: Text(
-                          startLocation.isNotEmpty
-                              ? startLocation
-                              : 'SELECT ROUTE START POINT',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: startLocation.isNotEmpty
-                                  ? Colors.black
-                                  : Colors.grey),
-                        ),
+                      child: Text(
+                        startLocation.isNotEmpty
+                            ? startLocation
+                            : 'SELECT ROUTE START POINT',
+                        style: TextStyle(
+                            color: startLocation.isNotEmpty
+                                ? Colors.black
+                                : Colors.grey),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
             const Text(
               'ROUTE END POINT',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
+
             GestureDetector(
               onTap: _selectEndPoint,
               child: Container(
@@ -105,7 +99,6 @@ class CreateTripPageState extends State<CreateTripPage> {
                     const Icon(Icons.location_on, color: Colors.red),
                     const SizedBox(width: 8),
                     Expanded(
-                      flex: 1, // Set flex property to 1
                       child: Text(
                         endLocation.isNotEmpty
                             ? endLocation
@@ -120,6 +113,7 @@ class CreateTripPageState extends State<CreateTripPage> {
                 ),
               ),
             ),
+
             const SizedBox(height: 16),
 
             TextFormField(
@@ -202,7 +196,7 @@ class CreateTripPageState extends State<CreateTripPage> {
                   onPressed: () => _setTripType('One Time'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                    tripType == 'One Time' ? Colors.yellow : Colors.grey,
+                        tripType == 'One Time' ? Colors.yellow : Colors.grey,
                   ),
                   child: const Text('One Time'),
                 ),
@@ -210,7 +204,7 @@ class CreateTripPageState extends State<CreateTripPage> {
                   onPressed: () => _setTripType('Daily'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                    tripType == 'Daily' ? Colors.yellow : Colors.grey,
+                        tripType == 'Daily' ? Colors.yellow : Colors.grey,
                   ),
                   child: const Text('Daily'),
                 ),
@@ -241,10 +235,10 @@ class CreateTripPageState extends State<CreateTripPage> {
       if (user != null) {
         // Get a reference to the document
         DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance
-            .collection('driverDetails')
-            .doc(user.uid) // Use the current user's UID as the document ID
-            .get();
+            await FirebaseFirestore.instance
+                .collection('driverDetails')
+                .doc(user.uid) // Use the current user's UID as the document ID
+                .get();
 
         // Check if the document exists
         bool isComplete = snapshot.exists;
@@ -278,10 +272,10 @@ class CreateTripPageState extends State<CreateTripPage> {
       if (user != null) {
         // Get a reference to the document
         DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance
-            .collection('driverDetails')
-            .doc(user.uid) // Use the current user's UID as the document ID
-            .get();
+            await FirebaseFirestore.instance
+                .collection('driverDetails')
+                .doc(user.uid) // Use the current user's UID as the document ID
+                .get();
 
         // Check if the status is approved
         return snapshot.exists && snapshot['status'] == 'approved';
@@ -303,7 +297,7 @@ class CreateTripPageState extends State<CreateTripPage> {
       ),
     ).then((_) {
       final locationProvider =
-      Provider.of<LocationProvider>(context, listen: false);
+          Provider.of<LocationProvider>(context, listen: false);
       setState(() {
         startLocation =
             locationProvider.startAddress ?? 'SELECT ROUTE START POINT';
@@ -320,7 +314,7 @@ class CreateTripPageState extends State<CreateTripPage> {
       ),
     ).then((_) {
       final locationProvider =
-      Provider.of<LocationProvider>(context, listen: false);
+          Provider.of<LocationProvider>(context, listen: false);
       setState(() {
         startLocation =
             locationProvider.startAddress ?? 'SELECT ROUTE START POINT';
@@ -337,6 +331,7 @@ class CreateTripPageState extends State<CreateTripPage> {
 
   void _submitForm(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    User? user = FirebaseAuth.instance.currentUser;
 
     String? phoneNumber = prefs.getString('phoneNumber');
     String? vehicleNo = prefs.getString('vehicleNo');
@@ -351,6 +346,7 @@ class CreateTripPageState extends State<CreateTripPage> {
         FirebaseFirestoreService().submitTripToFirestore(
             context: context,
             startLocation: startLocation,
+            userid: user!.uid,
             endLocation: endLocation,
             tripName: tripName.text.toString(),
             seatingCapacity: seatingCapacity.text.toString(),
