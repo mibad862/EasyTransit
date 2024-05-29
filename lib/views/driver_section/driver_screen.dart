@@ -13,6 +13,7 @@ import '../../common_widgets/webview_screen.dart';
 import '../../services/firebase_firestore_services.dart';
 import '../create_ride_screen/create_ride.dart';
 import '../parcel_delivery_screen/parcel_delivery.dart';
+import 'driver_rides_history.dart';
 
 class DriverScreen extends StatelessWidget {
   const DriverScreen(
@@ -238,6 +239,18 @@ class DriverScreen extends StatelessWidget {
           onTap: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => ChatScreen()));
+          },
+        ),
+        _createBoxItem(
+          text: 'Ride History',
+          imgPath: "assets/images/3d-car.png",
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>  DriverRidesHistory(),
+              ),
+            );
           },
         ),
       ],
