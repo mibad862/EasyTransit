@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class RideViewScreen extends StatelessWidget {
-  const RideViewScreen({super.key});
+  const
+  RideViewScreen({super.key});
 
   DateTime _parseTimeString(String timeString) {
     // Split the time string into hours and minutes
@@ -62,19 +63,19 @@ class RideViewScreen extends StatelessWidget {
 }
 
 Widget rideOption(
-  BuildContext context, {
-  required String documentId, // Add document ID parameter
+    BuildContext context, {
+      required String documentId, // Add document ID parameter
 
-  required String driverName,
-  required String carType,
-  required String pickUp,
-  required String dropOff,
-  required DateTime date,
-  required DateTime time,
-  required String seatCapacity,
-  // required contactNo,
-  // required vehicleNo,
-}) {
+      required String driverName,
+      required String carType,
+      required String pickUp,
+      required String dropOff,
+      required DateTime date,
+      required DateTime time,
+      required String seatCapacity,
+      // required contactNo,
+      // required vehicleNo,
+    }) {
   return Card(
     elevation: 4,
     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
